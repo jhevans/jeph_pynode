@@ -16,7 +16,7 @@ class WikiGraph(object):
     def add_article(self, title, id=None):
         if id is not None:
             query = """MERGE (article:Article { title:{title}})
-                ON CREATE SET article.id = {id}
+                ON CREATE SET article.wikiid = {id}
                 """
 
             self.graph.cypher.execute(query, title=title, id=id)
@@ -32,14 +32,20 @@ class WikiGraph(object):
                     ON CREATE SET rel.weight = 1
                     ON MATCH SET rel.weight = rel.weight + {count}
                 """
-
         self.graph.cypher.execute(query, from_title=from_title, to_title=to_title, count=count)
+
+    def add_links(self, from_title, dict_of_links):
+        for link in dict_of_links.keys():
+            count = dict_of_links[link]
+            self.add_link(from_title, link, count=count)
 
     def get_related_articles(self, article_title):
         query = """MATCH (article1:Article {title: {title}})-[:RELATED_TO]->(article2: Article) RETURN article2"""
 
         result = self.graph.cypher.execute(query, title=article_title)
         return result
+
+
 
 
 def test1():
