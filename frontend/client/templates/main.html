@@ -1,17 +1,16 @@
 <template name="main">
-    <head>
         <title>Our Lovely App</title>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    </head>
 
-    <body>
     <div class="container">
-        <header>
-            {{> navbar}}
-        </header>
+        {{> navbar}}
 
-        {{> routeSearch}}
-
+        {{> yield}}
     </div>
-    </body>
+    <hr />
+
+    <div class="panel-footer">
+        <p>Copyright &copy; WikiHop, 2015.</p>
+    </div>
+
 </template>
