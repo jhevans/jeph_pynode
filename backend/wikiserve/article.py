@@ -13,10 +13,10 @@ class Article(object):
         self.related_articles = self._get_related_articles(page_id)
 
     def _get_name(self, page_id):
-        name = self.graphparent.get_name
+        name = self.graphparent.get_name(page_id)
         return name
 
     def _get_related_articles(self, page_id):
-        related_articles = self.graphparent.get_related_articles
+        related_articles = self.graphparent.get_related_articles(page_id)
         return related_articles
 
