@@ -29,14 +29,8 @@
         </div>
     </form>
 
-    <div class="col-xs-10">
-        <div class="col-sm-offset-2">
-            {{route}}
-        </div>
-    </div>
-
     {{#each linkedArticles}}
-        {{>linkedArticleDetails}}
+        {{>linkedArticle}}
     {{/each}}
 
 </template>

@@ -22,14 +22,11 @@ Template.routeSearch.events({
 
 Template.routeSearch.helpers({
     from: function(){
-        return Session.get('from')
+        return Session.get('from');
     },
     to: function(){
-        return Session.get('to')
+        return Session.get('to');
 
-    },
-    route: function(){
-        return Session.get('route');
     },
     linkedArticles: function(){
         return Session.get('route').targetArticles[0].linkedArticles;
