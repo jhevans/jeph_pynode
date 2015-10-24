@@ -20,7 +20,7 @@ class WikiArticleGraph(object):
         return "http://{}:{}@{}:{}/db/data".format(username, password, server_path, port)
 
     def add_article(self, title, id):
-        self.do_batch_article_query(title, id)
+        self.do_batch_article_query(id, title)
 
     def add_link(self, from_title, to_title, count=1):
         query = """MERGE (from:Article {title:{from_title}})-[rel:RELATED_TO]->(to:Article {title:{to_title}})
@@ -43,7 +43,7 @@ class WikiArticleGraph(object):
     def do_batch_article_query(self, id, name):
         name = name.replace('"', '')
         with open(settings.BATCH_ARTICLE_FILE, 'a') as batch_file:
-            batch_file.write("{},{}\n".format(id, name.replace('"', '')))
+            batch_file.write("{},{}\n".format(id, name))
         self.query_count += 1
         if self.query_count >= self.batch_size:
             self.purge_queries()
