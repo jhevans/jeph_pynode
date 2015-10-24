@@ -24,3 +24,4 @@ class Server(object):
 
 if __name__ == '__main__':
     cherrypy.quickstart(Server())
+

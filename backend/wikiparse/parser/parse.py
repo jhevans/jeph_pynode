@@ -1,65 +1,89 @@
 __author__ = 'Edward.Kent'
 
 from lxml import etree
-
-
+from backend.wikiparse.parser import links_counter
+from backend.graph.graph import WikiGraph
 import datetime
 
 ns = '{http://www.mediawiki.org/xml/export-0.10/}'
 
+class Parser(object):
 
-def whole_file_parse(filepath, limit=None):
+    def __init__(self, graph):
+        """
+        :param graph:
+        :type graph: WikiGraph
+        """
+        self.graph = graph
 
-    context = etree.iterparse(open(filepath, 'r'), events=('end',))
+    def whole_file_parse(self, filepath, limit=None):
 
-    element_count = 0
-    page_count = 0
-    start_time = datetime.datetime.now()
+        context = etree.iterparse(open(filepath, 'r'), events=('end',))
 
-    for (event, elem) in context:
-        if elem.tag == ns+'page':
-            # do things here
-            page_parse(elem)
-            page_count += 1
-            elem.clear()
-            while elem.getprevious() is not None:
-                del elem.getparent()[0]
+        element_count = 0
+        page_count = 0
+        start_time = datetime.datetime.now()
 
-        element_count += 1
+        for (event, elem) in context:
+            if elem.tag == ns+'page':
+                # do things here
+                self.parse_article(elem)
+                page_count += 1
+                if page_count %10000 == 0:
+                    print page_count, '...'
 
-        if page_count %100000 == 0:
-            print page_count, '...'
+                elem.clear()
+                while elem.getprevious() is not None:
+                    del elem.getparent()[0]
 
-        if limit is not None:
-            if element_count >= limit:
-                break
-    del context
+            element_count += 1
 
-    end_time = datetime.datetime.now()
+            if limit is not None:
+                if element_count >= limit:
+                    break
 
-    print end_time
-    print page_count
-    print element_count
-    print end_time - start_time
+        self.graph.purge_queries()
+        del context
 
+        end_time = datetime.datetime.now()
 
-def page_parse(element):
-    """
-    Parses a wikipedia 'page', returning the page title, id, and a dictionary of links
+        print end_time
+        print page_count
+        print element_count
+        print end_time - start_time
 
-    :param element:
-    :rtype: (str, str, dict)
-    """
+    def parse_article(self, element):
+        """
+        Parses a wikipedia 'page', adding the article title and id to the graph
+        """
 
-    try:
-        redirect = element.find(ns+'redirect')
-        if redirect is not None:
+        try:
+            redirect = element.find(ns+'redirect')
+            if redirect is not None:
+                return None
+            title = element.find(ns+'title').text.encode('utf-8')
+            id = element.find(ns+'id').text
+            self.graph.add_article(title, id)
+
+        except Exception as e:
             return None
-        title = element.find(ns+'title').text.encode('utf-8')
-        id = element.find(ns+'id').text
-        revision = element.find(ns+'revision')
-        text = revision.find(ns+'text').text.encode('utf-8')
 
-        #TODO: process text here
-    except Exception as e:
-        return None
+    def parse_links(self, element):
+        """
+        Parses a wikipedia 'page', adding links from the article
+        """
+        try:
+            redirect = element.find(ns+'redirect')
+            if redirect is not None:
+                return None
+            title = element.find(ns+'title').text.encode('utf-8')
+            id = element.find(ns+'id').text
+            revision = element.find(ns+'revision')
+            text = revision.find(ns+'text').text.encode('utf-8')
+            count_of_links = links_counter.get_count_of_links(text)
+            self.graph.add_links(title, count_of_links)
+
+        except Exception as e:
+            return None
+
+
