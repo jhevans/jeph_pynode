@@ -43,7 +43,7 @@ class WikiArticleGraph(object):
     def do_batch_article_query(self, id, name):
         name = name.replace('"', '')
         with open(settings.BATCH_ARTICLE_FILE, 'a') as batch_file:
-            batch_file.write("{},{}\n".format(id, name))
+            batch_file.write("{},{}\n".format(id, name.replace('"', '')))
         self.query_count += 1
         if self.query_count >= self.batch_size:
             self.purge_queries()
