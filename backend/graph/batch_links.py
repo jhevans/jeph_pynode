@@ -12,7 +12,7 @@ class WikiLinksGraph(object):
                                         settings.NEO4J_PASSWORD))
         self.reset_batch()
         self.query_count = 0
-        self.batch_size = 10000
+        self.batch_size = 1000
 
     @staticmethod
     def get_uri(server_path, port, username, password):
