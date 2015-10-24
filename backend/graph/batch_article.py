@@ -41,16 +41,16 @@ class WikiArticleGraph(object):
         return result
 
     def do_batch_article_query(self, id, name):
-        name = name.replace('"', '').lower()
+        name = name.replace('"', '')
         with open(settings.BATCH_ARTICLE_FILE, 'a') as batch_file:
-            batch_file.write('{},"{}"\n'.format(id, name))
+            batch_file.write('{},"{}","{}"\n'.format(id, name, name.lower()))
         self.query_count += 1
         if self.query_count >= self.batch_size:
             self.purge_queries()
 
     def purge_queries(self):
         query = """LOAD CSV WITH HEADERS FROM "file://{}" AS csvLine
-            CREATE (a:Article {{ wikiid: toInt(csvLine.wikiid), title: csvLine.title }})
+            CREATE (a:Article2 {{ wikiid: toInt(csvLine.wikiid), title: csvLine.title, title_lower:csvLine.title_lower }})
         """.format(settings.BATCH_ARTICLE_FILE)
         self.graph.cypher.execute(query)
         self.query_count = 0
@@ -58,7 +58,7 @@ class WikiArticleGraph(object):
 
     def reset_batch(self):
         with open(settings.BATCH_ARTICLE_FILE, 'w') as batch_file:
-            batch_file.write("wikiid,title\n")
+            batch_file.write("wikiid,title,title_lower\n")
 
 
 
