@@ -1,4 +1,4 @@
-from parser import parse
+from backend.wikiparse.parser import parse
 import settings
 import sys
 

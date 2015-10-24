@@ -1,4 +1,4 @@
-WIKIPEDIA_XML_FILEPATH = '/data/wikipedia/enwiki-20150901-pages-articles-multistream.xml'
+WIKIPEDIA_XML_FILEPATH = 'backend/fixtures/test_wikipedia_snippet.xml'
 
 NEO4J_USERNAME = 'neo4j'
 NEO4J_PASSWORD = 'neo4j123'
