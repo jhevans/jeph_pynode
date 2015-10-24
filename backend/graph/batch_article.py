@@ -49,7 +49,7 @@ class WikiArticleGraph(object):
 
     def purge_queries(self):
         query = """LOAD CSV WITH HEADERS FROM "file://{}" AS csvLine
-            CREATE (a:Article { wikiid: toInt(csvLine.wikiid), title: csvLine.title })
+            CREATE (a:Article {{ wikiid: toInt(csvLine.wikiid), title: csvLine.title }})
         """.format(settings.BATCH_ARTICLE_FILE)
         self.graph.cypher.execute(query)
         self.query_count = 0
