@@ -9,7 +9,7 @@ __author__ = 'Edward.Kent'
 def run():
     graph = WikiGraph()
     parser = parse.Parser(graph)
-    parser.whole_file_parse(settings.WIKIPEDIA_XML_FILEPATH_FULL, limit=100000)
+    parser.whole_file_parse(settings.WIKIPEDIA_XML_FILEPATH_FULL)
 
 if __name__ == '__main__':
     run()

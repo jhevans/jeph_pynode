@@ -10,7 +10,7 @@ class WikiGraph(object):
                                         settings.NEO4J_PASSWORD))
         self.transaction = self.graph.cypher.begin()
         self.query_count = 0
-        self.batch_size = 20
+        self.batch_size = 40
 
 
     @staticmethod
