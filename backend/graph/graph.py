@@ -8,6 +8,10 @@ class WikiGraph(object):
     def __init__(self):
         self.graph = Graph(self.get_uri(settings.NEO4J_SERVER, settings.NEO4J_PORT, settings.NEO4J_USERNAME,
                                         settings.NEO4J_PASSWORD))
+        self.transaction = self.graph.cypher.begin()
+        self.query_count = 0
+        self.batch_size = 10
+
 
     @staticmethod
     def get_uri(server_path, port, username, password):
@@ -19,20 +23,20 @@ class WikiGraph(object):
                 ON CREATE SET article.wikiid = {id}
                 """
 
-            self.graph.cypher.execute(query, title=title, id=id)
+            self.do_batch_query(query, title=title, id=id)
 
         else:
             query = """MERGE (article:Article { title:{title}})
                 """
 
-            self.graph.cypher.execute(query, title=title)
+            self.do_batch_query(query, title=title)
 
     def add_link(self, from_title, to_title, count=1):
         query = """MERGE (from:Article {title:{from_title}})-[rel:RELATED_TO]->(to:Article {title:{to_title}})
                     ON CREATE SET rel.weight = 1
                     ON MATCH SET rel.weight = rel.weight + {count}
                 """
-        self.graph.cypher.execute(query, from_title=from_title, to_title=to_title, count=count)
+        self.do_batch_query(query, from_title=from_title, to_title=to_title, count=count)
 
     def add_links(self, from_title, dict_of_links):
         for link in dict_of_links.keys():
@@ -45,6 +49,16 @@ class WikiGraph(object):
         result = self.graph.cypher.execute(query, title=article_title)
         return result
 
+    def do_batch_query(self, query, **kwargs):
+        self.transaction.append(query, **kwargs)
+        self.query_count += 1
+        if self.query_count >= self.batch_size:
+            self.purge_queries()
+
+    def purge_queries(self):
+        self.transaction.commit()
+        self.query_count = 0
+        self.transaction = self.graph.cypher.begin()
 
 
 
