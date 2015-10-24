@@ -10,9 +10,6 @@ ns = '{http://www.mediawiki.org/xml/export-0.10/}'
 
 def parse(filepath, limit=None):
 
-    if limit is None:
-        limit = 0
-
     context = etree.iterparse(open(filepath, 'r'), events=('end',))
 
     element_count = 0
@@ -33,8 +30,9 @@ def parse(filepath, limit=None):
         if page_count %100000 == 0:
             print page_count, '...'
 
-        if element_count >= limit:
-            break
+        if limit is not None:
+            if element_count >= limit:
+                break
     del context
 
     end_time = datetime.datetime.now()
