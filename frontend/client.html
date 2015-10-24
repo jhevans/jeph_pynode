@@ -17,16 +17,23 @@
 <template name="routeSearch">
 
     <form class="routeSearchForm">
-        <label for="fromInput">From:</label>
-        <input type="text" name="fromInput" class="fromInput">
+        <div class="col-xs-10 form-group">
+            <label for="fromInput" class="control-label">From:</label>
+            <input type="text" id="fromInput" name="fromInput" class="fromInput form-control" placeholder="From">
+            <span class="help-block">Please enter a subject to....</span>
+        </div>
+        <div class="col-xs-10 form-group">
+            <label for="toInput" class="control-label">To:</label>
+            <input type="text" id="toInput" name="toInput" class="toInput form-control col-xs-3" placeholder="To">
+            <span class="help-block">Please enter a subject to...</span>
+        </div>
 
-        <label for="toInput">To:</label>
-        <input type="text" name="toInput" class="toInput">
+        <div class="col-xs-10 form-group">
+            <p> Search for a route from {{from}} to {{to}}</p>
+            <button type="submit" class="btn btn-success">Find a route</button>
+        </div>
 
 
-        <p>Search for a route from {{from}} to {{to}}</p>
-
-        <button type="submit">Find a route</button>
     </form>
 </template>
 
