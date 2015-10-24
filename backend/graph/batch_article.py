@@ -41,7 +41,7 @@ class WikiArticleGraph(object):
         return result
 
     def do_batch_article_query(self, id, name):
-        with open(settings.FILE, 'w+') as batch_file:
+        with open(settings.BATCH_ARTICLE_FILE, 'w+') as batch_file:
             batch_file.write("{},{}\n".format(id, name))
         self.query_count += 1
         if self.query_count >= self.batch_size:
@@ -56,7 +56,7 @@ class WikiArticleGraph(object):
         self.reset_batch()
 
     def reset_batch(self):
-        with open(settings.FILE, 'w') as batch_file:
+        with open(settings.BATCH_ARTICLE_FILE, 'w') as batch_file:
             batch_file.write("wikiid,title\n")
 
 
