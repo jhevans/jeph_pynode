@@ -56,8 +56,9 @@ class WikiArticleGraph(object):
         self.reset_batch()
 
     def reset_batch(self):
-        with open(settings.BATCH_ARTICLE_FILE, 'w') as batch_file:
-            batch_file.write("wikiid,title\n")
+        pass
+        # with open(settings.BATCH_ARTICLE_FILE, 'w') as batch_file:
+        #     batch_file.write("wikiid,title\n")
 
 
 
