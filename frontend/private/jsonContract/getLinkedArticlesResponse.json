@@ -1,0 +1,18 @@
+{
+  "targetArticles": [
+    {
+      "id": "43568",
+      "name": "Tom_Hanks",
+      "linkedArticles": [
+        {
+          "id": "41528",
+          "name": "Forrest_Gump"
+        },
+        {
+          "id": "2766931",
+          "name": "Green_Mile"
+        }
+      ]
+    }
+  ]
+}
