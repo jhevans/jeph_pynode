@@ -6,7 +6,7 @@ __author__ = 'Edward.Kent'
 
 
 def run():
-    parse.whole_file_parse(settings.WIKIPEDIA_XML_FILEPATH, limit=10000)
+    parse.whole_file_parse(settings.WIKIPEDIA_XML_FILEPATH_TEST, limit=10000)
 
 if __name__ == '__main__':
     run()
