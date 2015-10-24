@@ -6,7 +6,7 @@ Meteor.methods({
 
 
 
-        var expectedResponse = Assets.getText('jsonContract/getLinkedArticlesResponse.json')
+        var expectedResponse = JSON.parse(Assets.getText('jsonContract/getLinkedArticlesResponse.json'));
 
         return expectedResponse;
     }

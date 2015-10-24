@@ -3,7 +3,6 @@ Template.routeSearch.events({
     "submit .routeSearchForm": function (event) {
         // Prevent default browser form submit
         event.preventDefault();
-        console.log("submitting!")
 
         // Get value from form element
         var from = event.target.fromInput.value;
@@ -31,5 +30,8 @@ Template.routeSearch.helpers({
     },
     route: function(){
         return Session.get('route');
+    },
+    linkedArticles: function(){
+        return Session.get('route').targetArticles[0].linkedArticles;
     }
 })

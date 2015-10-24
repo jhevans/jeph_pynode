@@ -27,13 +27,16 @@
                 <button type="submit" class="btn btn-lg btn-default">Find a route</button>
             </div>
         </div>
-
-        <div class="col-xs-10">
-            <div class="col-sm-offset-2">
-                {{route}}
-            </div>
-        </div>
-
-
     </form>
+
+    <div class="col-xs-10">
+        <div class="col-sm-offset-2">
+            {{route}}
+        </div>
+    </div>
+
+    {{#each linkedArticles}}
+        {{>linkedArticleDetails}}
+    {{/each}}
+
 </template>
