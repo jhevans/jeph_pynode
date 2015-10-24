@@ -16,7 +16,7 @@ def _get_all_linked_articles(_text):
     links_with_pipes = regex.findall(_text)
     links = []
     for link in links_with_pipes:
-        article_name = link.split('|')[0]
+        article_name = link.split('|')[0].split('#')[0]
         links.append(article_name)
     return links
 
