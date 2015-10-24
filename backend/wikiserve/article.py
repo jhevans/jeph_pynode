@@ -4,7 +4,7 @@ __author__ = 'Peter.Ogden'
 __copyright__ = 'Copyright (C) 2015, Auto Trader UK'
 
 
-class ActiveArticle(object):
+class Article(object):
 
     def __init__(self, page_id, wikigraph):
         self.page_id = page_id
