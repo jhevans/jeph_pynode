@@ -29,7 +29,7 @@ class Parser(object):
                 # do things here
                 self.parse_links(elem)
                 page_count += 1
-                if page_count %10000 == 0:
+                if page_count %100 == 0:
                     print page_count, '...'
 
                 elem.clear()
