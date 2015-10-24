@@ -8,13 +8,6 @@ if (Meteor.isClient) {
     }
   });
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
-    }
-  });
-
   Template.routeSearch.events({
     "submit .routeSearchForm": function (event) {
       // Prevent default browser form submit
