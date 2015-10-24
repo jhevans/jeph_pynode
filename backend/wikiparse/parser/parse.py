@@ -27,7 +27,7 @@ class Parser(object):
         for (event, elem) in context:
             if elem.tag == ns+'page':
                 # do things here
-                self.parse_article(elem)
+                self.parse_links(elem)
                 page_count += 1
                 if page_count %10000 == 0:
                     print page_count, '...'

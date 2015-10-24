@@ -41,7 +41,7 @@ class WikiLinksGraph(object):
 
     def purge_queries(self):
         query = """LOAD CSV WITH HEADERS FROM "file://{}" AS csvLine
-            MATCH (from: Article {title:{csvLine.from_title}}), (to:Article {title:{csvLine.to_title}})
+            MATCH (from: Article {{title:csvLine.from_title}}), (to:Article {{title:csvLine.to_title}})
             MERGE (from)-[rel:RELATED_TO]->(to)
             ON CREATE SET rel.weight = toInt(csvLine.weight)
             ON MATCH SET rel.weight = rel.weight + toInt(csvLine.weight)
