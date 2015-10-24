@@ -7,6 +7,11 @@ import re
 
 
 def _get_all_linked_articles(_text):
+    """
+    Runs a regex on a text string that recognises strings of text wrapped in double square braces
+    :param _text:
+    :rtype: list of strings
+    """
     regex = re.compile("\[\[(.*?)\]\]")
     links_with_pipes = regex.findall(_text)
     links = []
@@ -17,6 +22,13 @@ def _get_all_linked_articles(_text):
 
 
 def _get_count_of_items(links):
+    """
+    Loops over a list of strings, for string it checks if its in the count
+    dictionary, if not the item is added with a count of one, if already
+    present, it increments the count by one
+    :param links:
+    :rtype: dict of string keys with int values
+    """
     _link_count = {}
     for link in links:
         if link not in _link_count.keys():
@@ -27,6 +39,11 @@ def _get_count_of_items(links):
 
 
 def get_count_of_links(_text):
+    """
+    Gets a count of the number of times in a string, a substring occurs, surrounded
+    :param _text:
+    :return:
+    """
     links = _get_all_linked_articles(_text)
     _link_count = _get_count_of_items(links)
     return _link_count

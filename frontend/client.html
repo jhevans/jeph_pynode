@@ -1,26 +1,13 @@
 <head>
   <title>Our Lovely App</title>
-
-    <link href="/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 
 <body>
     <div class="container">
-        <h1>Welcome to Meteor!</h1>
-        {{> hello}}
-        {{> search}}
+        <header>
+            {{> navbar}}
+        </header>
+        {{> routeSearch}}
     </div>
 </body>
-
-<template name="search">
-    <label for="fromInput">From:</label>
-    <input type="text" name="fromInput">
-
-    <label for="toInput">To:</label>
-    <input type="text" name="toInput">
-</template>
-
-<template name="hello">
-  <button class="btn btn-success"> Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template>
