@@ -30,8 +30,8 @@ class WikiLinksGraph(object):
             self.add_link(from_title, link, count=count)
 
     def do_batch_link_query(self, from_title, to_title, weight):
-        from_title = from_title.replace('"', '')
-        to_title = to_title.replace('"', '')
+        from_title = from_title.replace('"', '').replace('\\', '').lower()
+        to_title = to_title.replace('"', '').replace('\\', '').lower()
 
         with open(settings.BATCH_LINK_FILE, 'a') as batch_file:
             batch_file.write("{},{},{}\n".format(from_title, to_title, weight))
@@ -41,7 +41,7 @@ class WikiLinksGraph(object):
 
     def purge_queries(self):
         query = """LOAD CSV WITH HEADERS FROM "file://{}" AS csvLine
-            MATCH (from: Article {{title:csvLine.from_title}}), (to:Article {{title:csvLine.to_title}})
+            MATCH (from: Article2 {{title_lower:csvLine.from_title}}), (to:Article2 {{title_lower:csvLine.to_title}})
             MERGE (from)-[rel:RELATED_TO]->(to)
             ON CREATE SET rel.weight = toInt(csvLine.weight)
             ON MATCH SET rel.weight = rel.weight + toInt(csvLine.weight)
