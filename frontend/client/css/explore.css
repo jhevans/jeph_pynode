@@ -1,0 +1,16 @@
+.node {
+    fill: #ccc;
+    stroke: #fff;
+    stroke-width: 2px;
+}
+
+.node:first-of-type {
+     fill: #4c4;
+     stroke: #fff;
+     stroke-width: 2px;
+}
+
+.link {
+    stroke: #777;
+    stroke-width: 2px;
+}

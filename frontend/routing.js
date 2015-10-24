@@ -14,3 +14,8 @@ Router.route('/register', function () {
     this.render('register');
 });
 
+
+Router.route('/explore', function () {
+    this.render('explore');
+});
+
