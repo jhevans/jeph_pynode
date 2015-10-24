@@ -8,16 +8,24 @@
     <div class="container">
         <h1>Welcome to Meteor!</h1>
         {{> hello}}
-        {{> search}}
+        {{> routeSearch}}
     </div>
 </body>
 
-<template name="search">
-    <label for="fromInput">From:</label>
-    <input type="text" name="fromInput">
+<template name="routeSearch">
 
-    <label for="toInput">To:</label>
-    <input type="text" name="toInput">
+    <form class="routeSearchForm">
+        <label for="fromInput">From:</label>
+        <input type="text" name="fromInput" class="fromInput">
+
+        <label for="toInput">To:</label>
+        <input type="text" name="toInput" class="toInput">
+
+
+        <p>Search for a route from {{from}} to {{to}}</p>
+
+        <button type="submit">Find a route</button>
+    </form>
 </template>
 
 <template name="hello">
