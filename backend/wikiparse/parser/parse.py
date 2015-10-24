@@ -66,7 +66,7 @@ class Parser(object):
             self.graph.add_article(title, id)
 
         except Exception as e:
-            raise e
+            print e
             return None
 
     def parse_links(self, element):
