@@ -17,19 +17,18 @@ def whole_file_parse(filepath, limit=None):
     start_time = datetime.datetime.now()
 
     for (event, elem) in context:
-
         if elem.tag == ns+'page':
             # do things here
-            print elem.tag
+            page_parse(elem)
             page_count += 1
-        elem.clear()
-        while elem.getprevious() is not None:
-            del elem.getparent()[0]
+            elem.clear()
+            while elem.getprevious() is not None:
+                del elem.getparent()[0]
 
         element_count += 1
 
-        if page_count %100000 == 0:
-            print page_count, '...'
+        # if page_count %100000 == 0:
+        #     print page_count, '...'
 
         if limit is not None:
             if element_count >= limit:
@@ -52,7 +51,15 @@ def page_parse(element):
     :rtype: (str, str, dict)
     """
 
-    for elem in element.iter():
-        if elem.tag == 'title':
-            pass
-    pass
+    try:
+        redirect = element.find(ns+'redirect')
+        if redirect is not None:
+            return None
+        title = element.find(ns+'title').text.encode('utf-8')
+        id = element.find(ns+'id').text
+        revision = element.find(ns+'revision')
+        text = revision.find(ns+'text').text.encode('utf-8')
+
+        #TODO: process text here
+    except Exception as e:
+        return None
