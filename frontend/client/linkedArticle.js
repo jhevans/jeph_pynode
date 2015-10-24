@@ -7,7 +7,7 @@ Template.linkedArticle.helpers({
 });
 
 Template.linkedArticle.onCreated(function(){
-    Meteor.call("getWikiArticleByPageid", [this.pageid], function(error, response){
+    Meteor.call("getWikiArticleByPageid", [this.data.pageid], function(error, response){
         Session.set('wikiArticle', response);
     });
 })

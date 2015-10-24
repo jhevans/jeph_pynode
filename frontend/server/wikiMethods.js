@@ -1,9 +1,7 @@
 Meteor.methods({
     getWikiArticleByPageid: function(pageid){
-
-
-        var expectedResponse = JSON.parse(Assets.getText('wikiResponses/getArticleByPageid.json'));
-
-        return expectedResponse;
+        var url = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&pageids=";
+        var response = HTTP.get(url + pageid, {});
+        return JSON.parse(response.content).query.pages[pageid];
     }
 });
