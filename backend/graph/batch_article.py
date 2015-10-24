@@ -41,7 +41,7 @@ class WikiArticleGraph(object):
         return result
 
     def do_batch_article_query(self, id, name):
-        name = name.replace('"', '')
+        name = name.replace('"', '').replace('\\', '\\\\')
         with open(settings.BATCH_ARTICLE_FILE, 'a') as batch_file:
             batch_file.write('{},"{}","{}"\n'.format(id, name, name.lower()))
         self.query_count += 1
