@@ -29,14 +29,14 @@ class Parser(object):
                 # do things here
                 self.parse_article(elem)
                 page_count += 1
+                if page_count %100000 == 0:
+                    print page_count, '...'
+
                 elem.clear()
                 while elem.getprevious() is not None:
                     del elem.getparent()[0]
 
             element_count += 1
-
-            if page_count %100000 == 0:
-                print page_count, '...'
 
             if limit is not None:
                 if element_count >= limit:
