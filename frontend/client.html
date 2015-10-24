@@ -8,29 +8,36 @@
         <header>
             {{> navbar}}
         </header>
-
-        {{> hello}}
         {{> routeSearch}}
     </div>
 </body>
 
 <template name="routeSearch">
 
-    <form class="routeSearchForm">
-        <div class="col-xs-10 form-group">
-            <label for="fromInput" class="control-label">From:</label>
-            <input type="text" id="fromInput" name="fromInput" class="fromInput form-control" placeholder="From">
-            <span class="help-block">Please enter a subject to....</span>
+    <form class="routeSearchForm form-horizontal">
+        <div class="form-group">
+            <label for="fromInput" class="control-label col-lg-2">From:</label>
+            <div class="col-sm-6">
+                <input type="text" id="fromInput" name="fromInput" class="fromInput form-control input-lg" placeholder="From">
+                <span class="help-block">Please enter a subject to....</span>
+            </div>
         </div>
-        <div class="col-xs-10 form-group">
-            <label for="toInput" class="control-label">To:</label>
-            <input type="text" id="toInput" name="toInput" class="toInput form-control col-xs-3" placeholder="To">
-            <span class="help-block">Please enter a subject to...</span>
+        <div class="form-group">
+            <label for="toInput" class="control-label col-lg-2">To:</label>
+            <div class="col-sm-6">
+                <input type="text" id="toInput" name="toInput" class="toInput form-control input-lg" placeholder="To">
+                <span class="help-block">Please enter a subject to...</span>
+            </div>
         </div>
-
-        <div class="col-xs-10 form-group">
-            <p> Search for a route from {{from}} to {{to}}</p>
-            <button type="submit" class="btn btn-success">Find a route</button>
+        <div class="form-group">
+            <div class="col-sm-offset-2">
+                <p> Search for a route from {{from}} to {{to}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2">
+                <button type="submit" class="btn btn-lg btn-default">Find a route</button>
+            </div>
         </div>
 
         <div class="col-xs-10">
@@ -39,9 +46,4 @@
 
 
     </form>
-</template>
-
-<template name="hello">
-  <button class="btn btn-success"> Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
 </template>
