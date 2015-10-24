@@ -4,6 +4,10 @@
     stroke-width: 2px;
 }
 
+.nodeText {
+    stroke: #333;
+}
+
 .node:first-of-type {
      fill: #4c4;
      stroke: #fff;

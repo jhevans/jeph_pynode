@@ -1,29 +1,16 @@
+Template.explore.onCreated(function() {
+    getTargetArticle();
+});
+
 Template.explore.onRendered(function(){
     var width = 640*1.5,
         height = 480*1.5;
 
-    var nodes = [
-        { x: width/2, y: height/2 },
-        { },
-        { },
-        { },
-        { },
-        { },
-        { },
-        { },
-        { }
-    ];
 
-    var links = [
-        { source: 0, target: 1 },
-        { source: 0, target: 2 },
-        { source: 0, target: 3 },
-        { source: 0, target: 4 },
-        { source: 0, target: 5 },
-        { source: 0, target: 6 },
-        { source: 0, target: 7 },
-        { source: 0, target: 8 }
-    ];
+
+    var nodes = getNodes();
+
+    var links = getLinks();
 
     var svg = d3.select('.canvasContainer').append('svg')
         .attr('width', width)
@@ -47,11 +34,22 @@ Template.explore.onRendered(function(){
         .enter().append('circle')
         .attr('class', 'node');
 
+    var nodeText = svg.selectAll(".nodeText")
+        .data(nodes)
+        .enter().append('text')
+        .attr("dx", function(d){return -30})
+        .text(function(d){return d.name})
+        .attr('class', 'nodeText');
+
     force.on('end', function() {
 
         node.attr('r', width/25)
             .attr('cx', function(d) { return d.x; })
             .attr('cy', function(d) { return d.y; });
+
+        nodeText
+            .attr('x', function(d) { return d.x; })
+            .attr('y', function(d) { return d.y; });
 
         // We also need to update positions of the links.
         // For those elements, the force layout sets the
@@ -69,3 +67,31 @@ Template.explore.onRendered(function(){
     force.start();
 
 });
+
+function getTargetArticle(){
+    Meteor.call("getRoute", [], function(error, response){
+        console.log(response.targetArticles[0])
+        Session.set("targetArticle", response.targetArticles[0]);
+    });
+}
+
+function getNodes(){
+    var nodes = [];
+    debugger;
+    var targetArticle = Session.get("targetArticle");
+    nodes.push(targetArticle);
+    targetArticle.linkedArticles.forEach(function(article){
+        nodes.push(article);
+    })
+    return nodes;
+};
+
+function getLinks(){
+    var links = [];
+    getNodes().forEach(function(value, index){
+        links.push({source:0, target: index})
+    });
+
+    links.shift();
+    return links;
+}

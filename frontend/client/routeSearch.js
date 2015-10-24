@@ -31,4 +31,4 @@ Template.routeSearch.helpers({
     linkedArticles: function(){
         return Session.get('route').targetArticles[0].linkedArticles;
     }
-})
+});
