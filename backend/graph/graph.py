@@ -67,8 +67,10 @@ class WikiGraph(object):
                 if len(output) == 0:
                     query = """MATCH (article1:Page)-[rel]->(article2: Page)
                     WHERE article1.title =~ {title}
-                    RETURN article2"""
-                    result = self.graph.cypher.execute(query, title='(?i)'+article_title)
+                    RETURN article2
+                    LIMIT {limit}
+                    """
+                    result = self.graph.cypher.execute(query, title='(?i)'+article_title, limit=limit)
                     output = [node[0]["title"] for node in result]
 
 
