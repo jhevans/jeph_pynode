@@ -70,4 +70,3 @@ if __name__ == '__main__':
                             })
     mock_wikigraph = WikiGraph()
     cherrypy.quickstart(Server(mock_wikigraph))
-zzzzzzzzzzzzz
