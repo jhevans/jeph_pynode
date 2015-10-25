@@ -50,6 +50,13 @@ class WikiGraph(object):
             query = """MATCH (article1:Page {title: {title}})-[rel]->(article2: Page) RETURN article2"""
             result = self.graph.cypher.execute(query, title=article_title)
             output = [node[0]["title"] for node in result]
+            if len(output) == 0:
+                query = """MATCH (article1:Page)-[rel]->(article2: Page)
+                WHERE article1.title =~ {title}
+                RETURN article2"""
+                result = self.graph.cypher.execute(query, title='(?i)'+article_title)
+                output = [node[0]["title"] for node in result]
+
             return output
         else:
             if destinationTitle is None:
@@ -57,6 +64,13 @@ class WikiGraph(object):
                 query = """MATCH (article1:Page {title: {title}})-[rel]->(article2: Page) WITH article2, rand() as r RETURN article2 ORDER BY r LIMIT {limit}"""
                 result = self.graph.cypher.execute(query, title=article_title, limit=limit)
                 output = [node[0]["title"] for node in result]
+                if len(output) == 0:
+                    query = """MATCH (article1:Page)-[rel]->(article2: Page)
+                    WHERE article1.title =~ {title}
+                    RETURN article2"""
+                    result = self.graph.cypher.execute(query, title='(?i)'+article_title)
+                    output = [node[0]["title"] for node in result]
+
 
                 return output
 
@@ -71,7 +85,14 @@ class WikiGraph(object):
                  WITH article2, rand() as r RETURN article2 ORDER BY r LIMIT {limit}"""
                 result = self.graph.cypher.execute(query, title=article_title, limit=limit, correct=next_node)
                 output = [node[0]["title"] for node in result]
-
+                if len(output) == 0:
+                    query = """
+                    MATCH (article1:Page)-[rel]->(article2: Page)
+                    WHERE article1.title =~ {title} AND article2.title <> {correct}
+                    WITH article2, rand() as r RETURN article2 ORDER BY r LIMIT {limit}
+                    """
+                    result = self.graph.cypher.execute(query, title='(?i)'+article_title, limit=limit, correct=next_node)
+                    output = [node[0]["title"] for node in result]
                 output.append(next_node)
                 random.shuffle(output)
                 return output
@@ -89,7 +110,16 @@ class WikiGraph(object):
         """.replace('limit', str(settings.SHORTEST_PATH_LIMIT))
         result = self.graph.cypher.execute(query, from_title=from_title, to_title=to_title)
         if len(result) == 0:
-            raise cherrypy.NotFound()
+            query="""
+            MATCH (a:Page),(b:Page)
+            WHERE a.title =~ {from_title} AND b.title =~ {to_title}
+            WITH a, b MATCH
+            p = shortestPath((a)-[*..limit]-(b))
+            RETURN p
+            """.replace('limit', str(settings.SHORTEST_PATH_LIMIT))
+            result = self.graph.cypher.execute(query, from_title='(?i)'+from_title, to_title='(?i)'+to_title)
+            if len(result) == 0:
+                raise cherrypy.NotFound()
 
         nodes = result[0][0].nodes
         output = [node["title"] for node in nodes]
