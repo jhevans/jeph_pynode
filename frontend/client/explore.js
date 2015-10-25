@@ -57,13 +57,13 @@ function render(nodes, links) {
     force.charge(-1000);
 
     var link = svg.selectAll('.link')
-        .data(links)
+        .data(links, name)
         .enter().append('line')
         .attr('class', 'link');
 
 
     var nodeEnter = svg.selectAll(".nodeCircle")
-        .data(nodes)
+        .data(nodes, name)
         .enter();
 
     var nodeCircle = nodeEnter.append('circle')
@@ -74,21 +74,24 @@ function render(nodes, links) {
         })
         .attr('class', 'nodeCircle');
 
-    var nodeText = nodeEnter.append("a")
+    var nodeText = svg.selectAll(".nodeText")
+        .data(nodes, name)
+        .enter()
+        .append("a")
         .attr("xlink:href", function(d){return d.url;})
         .append('text')
         .attr("dx", function (d) {
             return -30;
         })
         .text(function (d) {
-            console.log(d.name)
-            return d.name
+            console.log(d.name);
+            return d.name;
         })
         .attr('class', 'nodeText');
 
     force.on('tick', function () {
 
-        nodeCircle.attr('r', width / 25)
+        svg.selectAll(".nodeCircle").attr('r', width / 25)
             .attr('cx', function (d) {
                 return d.x;
             })
@@ -96,7 +99,7 @@ function render(nodes, links) {
                 return d.y;
             });
 
-        nodeText
+        svg.selectAll(".nodeText")
             .attr('x', function (d) {
                 return d.x;
             })
@@ -109,7 +112,7 @@ function render(nodes, links) {
         // `source` and `target` properties, specifying
         // `x` and `y` values in each case.
 
-        link
+        svg.selectAll(".link")
             .attr('x1', function (d) {
                 return d.source.x;
             })
