@@ -52,8 +52,17 @@ Template.wikiHop.events({
 
         }
 
-    }
+    },
 
+    "reset .wikiHopForm": function (event) {
+        Session.set('linkedArticles', null);
+        event.target.fromInput.value='';
+        event.target.toInput.value='';
+        event.target.shortestCheckbox.checked=false;
+        event.target.limitInput.value='';
+        event.preventDefault();
+
+    }
 });
 
 Template.wikiHop.helpers({
