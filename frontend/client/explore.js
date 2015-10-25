@@ -23,7 +23,7 @@ function update(nextArticle){
         })
 
         var targetArticle = {
-            name: "Glass"
+            name: nextArticle
         };
         getNodes(targetArticle, linkedArticleObjects)
         getLinks(targetArticle, linkedArticleObjects);
