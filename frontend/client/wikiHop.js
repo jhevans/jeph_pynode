@@ -1,5 +1,5 @@
 Template.wikiHop.events({
-    "submit .registerForm": function (event) {
+    "submit .wikiHopForm": function (event) {
         // Prevent default browser form submit
         event.preventDefault();
 
