@@ -6,7 +6,6 @@ var yCentre = height/2;
 
 var force;
 
-
 var nodes;
 var links;
 var svg;
@@ -22,10 +21,12 @@ function update(nextArticle){
                 name: articleName
             })
         })
-        nodes = getNodes({
+
+        var targetArticle = {
             name: "Glass"
-        }, linkedArticleObjects)
-        links = getLinks(linkedArticleObjects);
+        };
+        getNodes(targetArticle, linkedArticleObjects)
+        getLinks(targetArticle, linkedArticleObjects);
         render(nodes, links);
 
         //force.start();
@@ -34,7 +35,8 @@ function update(nextArticle){
 
 
 
-function render(nodes, links) {
+//function render(nodes, links) {
+function render() {
 
     svg = d3.select('.canvasContainer')
         .attr('width', width)
@@ -48,15 +50,24 @@ function render(nodes, links) {
     force.linkDistance(width / 6);
     force.charge(-1000);
 
-    var link = svg.selectAll('.link')
+    var linkGroup = svg.selectAll('.link');
+    var link = linkGroup
         .data(links, name)
         .enter().append('line')
         .attr('class', 'link');
 
+    linkGroup
+        .data(links, name)
+        .exit().remove();
 
-    var nodeEnter = svg.selectAll(".nodeCircle")
+    var nodeCircleGroup = svg.selectAll(".nodeCircle");
+    var nodeEnter = nodeCircleGroup
         .data(nodes, name)
         .enter();
+
+    nodeCircleGroup
+        .data(nodes, name)
+        .exit().remove();
 
     var nodeCircle = nodeEnter.append('circle')
         .on('click', function(d){
@@ -66,11 +77,22 @@ function render(nodes, links) {
         })
         .attr('class', 'nodeCircle');
 
-    var nodeText = svg.selectAll(".nodeText")
+    var nodeHyperlinkGroup = svg.selectAll(".nodeHyperlink");
+    var nodeText = nodeHyperlinkGroup
         .data(nodes, name)
         .enter()
         .append("a")
-        .attr("xlink:href", function(d){return d.url;})
+        .attr("xlink:href", function(d){return d.url;});
+
+    nodeHyperlinkGroup
+        .data(nodes, name)
+        .exit().remove();
+
+    var nodeTextGroup = svg.selectAll(".nodeText");
+
+    nodeTextGroup
+        .data(nodes, name)
+        .enter()
         .append('text')
         .attr("dx", function (d) {
             return -30;
@@ -81,9 +103,21 @@ function render(nodes, links) {
         })
         .attr('class', 'nodeText');
 
+    nodeTextGroup
+        .data(nodes, name)
+        .exit().remove();
+
+    nodeTextGroup
+        .data(nodes, name)
+        .text(function (d) {
+            console.log(d.name);
+            return d.name;
+        });
+
     force.on('tick', function () {
 
-        svg.selectAll(".nodeCircle").attr('r', width / 25)
+        svg.selectAll(".nodeCircle")
+            .attr('r', width / 25)
             .attr('cx', function (d) {
                 return d.x;
             })
@@ -133,16 +167,17 @@ Template.explore.onRendered(function(){
                 name: articleName
             })
         })
-        nodes = getNodes({
+        var targetArticle = {
             name: "Glass"
-        }, linkedArticleObjects)
-        links = getLinks(linkedArticleObjects)
+        };
+        nodes = getNodes(targetArticle, linkedArticleObjects)
+        links = getLinks(targetArticle, linkedArticleObjects)
         render(nodes, links);
     });
 });
 
 function getNodes(targetArticle, linkedArticles){
-    var nodes = [];
+    nodes = [];
     nodes.push(targetArticle);
 
     linkedArticles.forEach(function(article){
@@ -155,10 +190,10 @@ function getNodes(targetArticle, linkedArticles){
     return nodes;
 };
 
-function getLinks(linkedArticles){
-    var links = [];
+function getLinks(targetArticle, linkedArticles){
+    links = [];
     linkedArticles.forEach(function(value){
-        links.push({source:0, target: value})
+        links.push({source:targetArticle, target: value})
     });
 
     return links;
