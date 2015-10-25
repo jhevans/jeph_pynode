@@ -142,9 +142,9 @@ class WikiGraph(object):
             try:
                 random_node_1 = self.get_random_node()
                 random_node_2 = self.get_random_node()
-
-                assert len(self.get_shortest_path(random_node_1, random_node_2)) > 0
-                return random_node_1, random_node_2
+                path_length = len(self.get_shortest_path(random_node_1, random_node_2))
+                assert path_length > 0
+                return random_node_1, random_node_2, path_length
             except:
                 continue
 
