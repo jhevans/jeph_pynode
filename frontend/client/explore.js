@@ -194,12 +194,14 @@ function addToHistory(articleName){
 }
 
 Template.explore.onRendered(function(){
-    Meteor.call("getRandomArticle", [], function(error, targetArticle){
+
+    Meteor.call("getRelatedRandomArticles", [], function(error, response){
+        var sourceArticle = response.title1;
+        var targetArticle = response.title2;
         Session.set('target', targetArticle);
-        Meteor.call("getRandomArticle", [], function(error, sourceArticle){
-            renderArticleLinks(sourceArticle);
-        })
-    })
+        Session.set('pathLength', response.pathLength);
+        renderArticleLinks(sourceArticle);
+    });
 });
 
 
@@ -209,6 +211,9 @@ Template.explore.helpers({
     },
     target: function(){
         return Session.get('target');
+    },
+    pathLength: function(){
+        return Session.get('pathLength');
     }
 });
 
