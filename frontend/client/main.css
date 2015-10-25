@@ -17,13 +17,12 @@ html, body {
 }
 
 #wikiHop.jumbotron{
-     background: url('images/jeph_explore.png')!important;
+     background: url('images/jeph_explore.png') 80px 60px !important;
     background-size: contain;
  }
 
 #explore.jumbotron{
-     background: url('images/jeph_from_to.png') !important;
-    background-size: contain;
+     background: url('images/jeph_from_to.png') 80px 80px !important;
  }
 
 #home.jumbotron{
