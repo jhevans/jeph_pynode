@@ -43,12 +43,25 @@ class WikiGraph(object):
             count = dict_of_links[link]
             self.add_link(from_title, link, count=count)
 
-    def get_related_articles(self, article_title):
-        query = """MATCH (article1:Page {title: {title}})-[rel]->(article2: Page) RETURN article2"""
+    def get_related_articles(self, article_title, limit=None, destinationTitle=None):
+        if limit is None:
+            query = """MATCH (article1:Page {title: {title}})-[rel]->(article2: Page) RETURN article2"""
+            result = self.graph.cypher.execute(query, title=article_title)
+            output = [node[0]["title"] for node in result]
+            return output
+        else:
+            if destinationTitle is None:
+                limit = int(limit)
+                query = """MATCH (article1:Page {title: {title}})-[rel]->(article2: Page) WITH article2, rand() as r RETURN article2 ORDER BY r LIMIT {limit}"""
+                result = self.graph.cypher.execute(query, title=article_title, limit=limit)
+                output = [node[0]["title"] for node in result]
 
-        result = self.graph.cypher.execute(query, title=article_title)
-        output = [node[0]["title"] for node in result]
-        return output
+                return output
+
+            else:
+                raise NotImplementedError()
+
+        raise Exception()
 
     def do_batch_query(self, query, **kwargs):
         self.transaction.append(query, **kwargs)
