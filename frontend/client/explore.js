@@ -1,5 +1,5 @@
-var width = 640*1,
-    height = 480*1;
+var width = 640*1.5,
+    height = 480*1.5;
 
 var xCentre = width/2;
 var yCentre = height/2;
@@ -71,8 +71,8 @@ function render() {
 
     var nodeCircle = nodeEnter.append('circle')
         .on('click', function(d){
-            d.x = xCentre;
-            d.y = yCentre;
+            //d.x = xCentre;
+            //d.y = yCentre;
             update(d.name);
         })
         .attr('class', 'nodeCircle');
@@ -157,8 +157,8 @@ function render() {
 
     force.start();
 }
-Template.explore.onRendered(function(){
-    Meteor.call("getLinkedArticles", ["Glass"], function(error, linkedArticles){
+function renderArticleLinks(articleName) {
+    Meteor.call("getLinkedArticles", [articleName], function (error, linkedArticles) {
 
         var linkedArticleObjects = [];
 
@@ -168,12 +168,18 @@ Template.explore.onRendered(function(){
             })
         })
         var targetArticle = {
-            name: "Glass"
+            name: articleName
         };
         nodes = getNodes(targetArticle, linkedArticleObjects)
         links = getLinks(targetArticle, linkedArticleObjects)
         render(nodes, links);
-    });
+    })
+}
+Template.explore.onRendered(function(){
+    var articleName = "Glass";
+    Meteor.call("getRandomArticle", [], function(error, articleName){
+        renderArticleLinks(articleName);
+    })
 });
 
 function getNodes(targetArticle, linkedArticles){
