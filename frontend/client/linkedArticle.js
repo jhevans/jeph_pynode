@@ -1,17 +1,13 @@
-var count= 0
-
 Template.linkedArticle.helpers({
     wikiArticle: function(){
-        count++;
-        console.log("count = " + count)
-        return Session.get('wikiArticle' + this.pageid);
+        return Session.get('wikiArticle' + this.name);
     }
 });
 
 Template.linkedArticle.onCreated(function(){
-    var pageId = this.data.pageid;
+    var title = this.data.name;
 
-    Meteor.call("getWikiArticleByPageid", [pageId], function(error, response){
-        Session.set('wikiArticle'+ pageId, response);
+    Meteor.call("getWikiArticleByTitle", [title], function(error, response){
+        Session.set('wikiArticle'+ title, response);
     });
 })
