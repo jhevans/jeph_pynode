@@ -1,14 +1,14 @@
-.node {
+.nodeCircle {
     fill: #ccc;
     stroke: #fff;
     stroke-width: 2px;
 }
 
 .nodeText {
-    stroke: #333;
+    color: #333;
 }
 
-.node:first-of-type {
+.nodeCircle:first-of-type {
      fill: #4c4;
      stroke: #fff;
      stroke-width: 2px;

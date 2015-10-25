@@ -20,14 +20,17 @@ function render(nodes, links) {
         .enter().append('line')
         .attr('class', 'link');
 
-    var node = svg.selectAll('.node')
-        .data(nodes)
-        .enter().append('circle')
-        .attr('class', 'node');
 
-    var nodeText = svg.selectAll(".nodeText")
+    var nodeEnter = svg.selectAll(".nodeText")
         .data(nodes)
-        .enter().append('text')
+        .enter();
+
+    var nodeCircle = nodeEnter.append('circle')
+        .attr('class', 'nodeCircle');
+
+    var nodeText = nodeEnter.append("a")
+        .attr("xlink:href", function(d){return d.url;})
+        .append('text')
         .attr("dx", function (d) {
             return -30
         })
@@ -36,9 +39,11 @@ function render(nodes, links) {
         })
         .attr('class', 'nodeText');
 
+    //var nodeLink = nodeEnter;
+
     force.on('end', function () {
 
-        node.attr('r', width / 25)
+        nodeCircle.attr('r', width / 25)
             .attr('cx', function (d) {
                 return d.x;
             })
@@ -53,6 +58,20 @@ function render(nodes, links) {
             .attr('y', function (d) {
                 return d.y;
             });
+
+        //nodeLink
+        //    .attr('x', function (d) {
+        //        return d.x;
+        //    })
+        //    .attr('y', function (d) {
+        //        return d.y;
+        //    })
+        //    .attr('height', function (d) {
+        //        return 100;
+        //    })
+        //    .attr('width', function (d) {
+        //        return 100;
+        //    });
 
         // We also need to update positions of the links.
         // For those elements, the force layout sets the
@@ -82,7 +101,6 @@ Template.explore.onRendered(function(){
         var linkedArticles = targetArticle.linkedArticles;
         var nodes = getNodes(targetArticle, linkedArticles)
         var links = getLinks(linkedArticles)
-        debugger;
         render(nodes, links);
     });
 });
@@ -90,8 +108,13 @@ Template.explore.onRendered(function(){
 function getNodes(targetArticle, linkedArticles){
     var nodes = [];
     nodes.push(targetArticle);
+
     linkedArticles.forEach(function(article){
         nodes.push(article);
+    })
+
+    nodes.forEach(function(article){
+        article.url = "https://en.wikipedia.org/wiki/Tom_Hanks";
     })
     return nodes;
 };
