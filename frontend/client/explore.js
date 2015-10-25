@@ -1,5 +1,5 @@
-var width = 640*1.25,
-    height = 480*1.25;
+var width = 640*1,
+    height = 480*1;
 
 var force;
 

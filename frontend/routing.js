@@ -11,11 +11,11 @@ Router.route('/about', function () {
 });
 
 Router.route('/wikiHop', function () {
-    this.render('wikiHop');
+    this.render('explore');
 });
 
 
 Router.route('/explore', function () {
-    this.render('explore');
+    this.render('wikiHop');
 });
 

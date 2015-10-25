@@ -1,21 +1,29 @@
 <template name="explore">
-    <h1 class="jumbotron">Explore</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h1 class="jumbotron">Wiki Hop</h1>
 
-    <h2>Your target is {{target}} in {{pathLength}} hops!</h2>
+                <h2>Your target is {{target}} in {{pathLength}} hops!</h2>
 
+                {{#if successHops}}
+                    <h2>You got to {{lastChallenge.target}} in {{lastChallenge.nHops}} hops! Your target was {{lastChallenge.targetHops}}</h2>
+                {{else}}
+                    <h3>You're now at {{historyItems.length}} hops</h3>
+                {{/if}}
 
-    {{#if successHops}}
-        <h2>You got to {{lastChallenge.target}} in {{lastChallenge.nHops}} hops! Your target was {{lastChallenge.targetHops}}</h2>
-    {{else}}
-        <h3>You're now at {{historyItems.length}} hops</h3>
-    {{/if}}
+                <ul>
+                    {{#each historyItems}}
+                        <li>{{name}}</li>
+                    {{/each}}
+                </ul>
 
-    <ul>
-    {{#each historyItems}}
-        <li>{{name}}</li>
-    {{/each}}
-    </ul>
-    <svg class="canvasContainer">
+            </div>
+            <div class="col-md-8">
+                <svg width="100%" height="100%" class="canvasContainer">
 
-    </svg>
+                </svg>
+            </div>
+        </div>
+    </div>
 </template>
