@@ -45,11 +45,17 @@ class WikiGraph(object):
             self.add_link(from_title, link, count=count)
 
     def get_related_articles(self, article_title, limit=None, destinationTitle=None):
+
         if limit is None:
+            article_title = self.escape_brackets(article_title)
+            if destinationTitle is not None:
+                destinationTitle = self.escape_brackets(destinationTitle)
+
             # query = """MATCH (article1:Page {title: {title}})-[rel]->(article2: Page) RETURN article2"""
             # result = self.graph.cypher.execute(query, title=article_title)
             # output = [node[0]["title"] for node in result]
             # if len(output) == 0:
+
             query = """MATCH (article1:Page)-[rel]->(article2: Page)
             WHERE article1.title =~ {title}
             RETURN article2"""
@@ -59,6 +65,8 @@ class WikiGraph(object):
             return output
         else:
             if destinationTitle is None:
+                article_title = self.escape_brackets(article_title)
+
                 limit = int(limit)
                 # query = """MATCH (article1:Page {title: {title}})-[rel]->(article2: Page) WITH article2, rand() as r RETURN article2 ORDER BY r LIMIT {limit}"""
                 # result = self.graph.cypher.execute(query, title=article_title, limit=limit)
@@ -75,8 +83,11 @@ class WikiGraph(object):
                 return output
 
             else:
-
                 shortest_path = self.get_shortest_path(article_title, destinationTitle)
+                article_title = self.escape_brackets(article_title)
+                if destinationTitle is not None:
+                    destinationTitle = self.escape_brackets(destinationTitle)
+
                 next_node = shortest_path[1]
 
                 limit = int(limit) - 1  # insert the correct answer separately
@@ -107,6 +118,10 @@ class WikiGraph(object):
         # """.replace('limit', str(settings.SHORTEST_PATH_LIMIT))
         # result = self.graph.cypher.execute(query, from_title=from_title, to_title=to_title)
         # if len(result) == 0:
+
+        from_title = self.escape_brackets(from_title)
+        to_title = self.escape_brackets(to_title)
+
         query = """
         MATCH (a:Page),(b:Page)
         WHERE a.title =~ {from_title} AND b.title =~ {to_title}
@@ -126,6 +141,9 @@ class WikiGraph(object):
 
         if limit is None or str(limit) == '0' or str(limit) == '1':
             return self.get_shortest_path(from_title, to_title)
+
+        from_title = self.escape_brackets(from_title)
+        to_title = self.escape_brackets(to_title)
 
         limit = str(int(limit) - 1)
         query = """
@@ -175,6 +193,10 @@ class WikiGraph(object):
         self.transaction.commit()
         self.query_count = 0
         self.transaction = self.graph.cypher.begin()
+
+    @staticmethod
+    def escape_brackets(string):
+        return string.replace('(', '\\(').replace(')', '\\)')
 
 
 def test1():
