@@ -18,18 +18,23 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-6">
-                <div class="checkbox">
-                    <label><input type="checkbox" name="shortestCheckbox">shortest Path?</label>
+                <div class="col-sm-offset-2 col-sm-3">
+                    <label><input type="checkbox" name="shortestCheckbox">Shortest Path?</label>
                 </div>
+
+                <div class="col-sm-3">
+                    <input type="number" min="0" max="9"  id="limitInput" name="limitInput" class="form-control input-sm" placeholder="Number of Hops">
+                </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-6">
                 <div class="pull-right">
                     <button type="submit" class="btn btn-lg btn-default">Find a route</button>
                 </div>
+
             </div>
         </div>
-        <div class="form-group">
 
-        </div>
     </form>
 
     {{#each linkedArticles}}
