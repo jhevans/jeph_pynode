@@ -132,10 +132,20 @@ function render(nodes, links) {
     force.start();
 }
 Template.explore.onRendered(function(){
-    Meteor.call("getTargetArticle", [], function(error, targetArticle){
-        var linkedArticles = targetArticle.linkedArticles;
-        nodes = getNodes(targetArticle, linkedArticles)
-        links = getLinks(linkedArticles)
+    Meteor.call("getLinkedArticles", ["Glass"], function(error, linkedArticles){
+
+        var linkedArticleObjects = [];
+
+        linkedArticles.forEach(function (articleName) {
+            linkedArticleObjects.push({
+                name: articleName
+            })
+        })
+        nodes = getNodes({
+            name: "Glass"
+        }, linkedArticleObjects)
+        links = getLinks(linkedArticleObjects)
+        debugger;
         render(nodes, links);
     });
 });
