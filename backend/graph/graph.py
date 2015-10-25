@@ -136,6 +136,18 @@ class WikiGraph(object):
         output = result[0][0]["title"]
         return output
 
+    def get_random_nodes(self):
+        max_tries = 999
+        for i in range(max_tries):
+            try:
+                random_node_1 = self.get_random_node()
+                random_node_2 = self.get_random_node()
+
+                assert len(self.get_shortest_path(random_node_1, random_node_2)) > 0
+                return random_node_1, random_node_2
+            except:
+                continue
+
     def do_batch_query(self, query, **kwargs):
         self.transaction.append(query, **kwargs)
         self.query_count += 1

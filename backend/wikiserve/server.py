@@ -54,6 +54,12 @@ class Server(object):
     def randomTitle(self):
         return {'name': self.wikigraph.get_random_node()}
 
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def randomTitles(self):
+        title_1, title_2 = self.wikigraph.get_random_nodes()
+        return {'title1': title_1,
+                'title2': title_2}
 
 
 if __name__ == '__main__':
