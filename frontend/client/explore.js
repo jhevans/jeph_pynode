@@ -62,6 +62,12 @@ function render() {
             //d.y = yCentre;
             update(d.name);
         })
+        .on('mouseover', function(d){
+            Method.call("getWikiArticleByTitle", [d.name], function(error, response){
+                Session.set('extract', response);
+
+            });
+        })
         .attr('class', 'nodeCircle');
 
     var nodeHyperlinkGroup = svg.selectAll(".nodeHyperlink");
@@ -256,6 +262,9 @@ Template.explore.helpers({
     lastChallenge: function(){
         var completedChallenges = Session.get('completedChallenges');
         return completedChallenges[completedChallenges.length-1]
+    },
+    extract: function(){
+        return Session.get('extract');
     }
 });
 
