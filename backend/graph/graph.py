@@ -1,6 +1,8 @@
 import cherrypy
 from py2neo import Graph
 import backend.wikiparse.settings as settings
+from random import shuffle
+
 __author__ = 'Edward.Kent'
 
 
@@ -60,12 +62,20 @@ class WikiGraph(object):
                 return output
 
             else:
-                limit = int(limit)
-                query = """MATCH (article1:Page {title: {title}})-[rel]->(article2: Page) WITH article2, rand() as r RETURN article2 ORDER BY r LIMIT {limit}"""
-                result = self.graph.cypher.execute(query, title=article_title, limit=limit)
+
+                shortest_path = self.get_shortest_path(article_title, destinationTitle)
+                next_node = shortest_path[1]
+
+                limit = int(limit) - 1  # insert the correct answer separately
+                query = """MATCH (article1:Page {title: {title}})-[rel]->(article2: Page)
+                 WHERE article2.title <> {correct}
+                 WITH article2, rand() as r RETURN article2 ORDER BY r LIMIT {limit}"""
+                result = self.graph.cypher.execute(query, title=article_title, limit=limit, correct=next_node)
                 output = [node[0]["title"] for node in result]
 
-                # Get the shortest path too
+                output.append(next_node)
+                shuffle(output)
+                return output
 
 
 

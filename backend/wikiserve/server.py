@@ -23,11 +23,11 @@ class Server(object):
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
-    def related(self, title=None, limit=None): # Refactor to PUT
+    def related(self, title=None, limit=None, destinationTitle=None): # Refactor to PUT
         if title is not None:
             response = {}
             response['name'] = title
-            response['linkedArticles'] = self.wikigraph.get_related_articles(title, limit=limit)
+            response['linkedArticles'] = self.wikigraph.get_related_articles(title, limit=limit, destinationTitle=destinationTitle)
             return response
         else:
             return no_title_response
