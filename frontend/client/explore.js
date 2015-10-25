@@ -203,7 +203,7 @@ function addToHistory(articleName){
 }
 
 function saveLastChallenge() {
-    Session.set("successHops", Session.get('history').length);
+    Session.set("successHops", Session.get('history').length -1);
     var previousSource = Session.get('source');
     var lastTarget = Session.get('target');
     if (previousSource && lastTarget) {
@@ -264,6 +264,10 @@ Template.explore.helpers({
     },
     article: function(){
         return Session.get('article');
+    },
+    nHops: function(){
+        var length = Session.get('history').length;
+        return length ? length -1: 0;
     }
 });
 
