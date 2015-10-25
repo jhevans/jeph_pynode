@@ -139,9 +139,10 @@ function render() {
 }
 
 function renderArticleLinks(articleName, targetArticle) {
-    if(articleName === targetArticle){
-        Session.set("successHops", Session.get('history').length);
-        randomStart();
+    if(articleName && targetArticle && articleName.toLowerCase() === targetArticle.toLowerCase()){
+        saveLastChallenge();
+
+        randomStart(articleName);
         return;
     }
 
@@ -197,14 +198,36 @@ function addToHistory(articleName){
     Session.set('history', history);
 }
 
-function randomStart() {
+function saveLastChallenge() {
+    Session.set("successHops", Session.get('history').length);
+    var previousSource = Session.get('source');
+    var lastTarget = Session.get('target');
+    if (previousSource && lastTarget) {
+        var completedChallenges = Session.get('completedChallenges');
+
+        if (!completedChallenges) {
+            completedChallenges = [];
+        }
+
+        completedChallenges.push({
+            source: sourceArticle,
+            target: lastTarget,
+            nHops: Session.get('successHops'),
+            targetHops: Session.get('pathLength')
+        })
+
+        Session.set('completedChallenges', completedChallenges)
+    }
+}
+function randomStart(source) {
+
     Meteor.call("getRelatedRandomArticles", [], function (error, response) {
-        sourceArticle = response.title1;
+        source = response.title1;
         var targetArticle = response.title2;
         Session.set('target', targetArticle);
+        Session.set('source', source);
         Session.set('pathLength', response.pathLength);
-        debugger;
-        renderArticleLinks(sourceArticle, targetArticle);
+        renderArticleLinks(source, targetArticle);
     });
 }
 Template.explore.onRendered(function () {
@@ -216,6 +239,9 @@ Template.explore.helpers({
     historyItems: function(){
         return Session.get('history');
     },
+    source: function(){
+        return Session.get('source');
+    },
     target: function(){
         return Session.get('target');
     },
@@ -224,6 +250,13 @@ Template.explore.helpers({
     },
     successHops: function(){
         return Session.get('successHops');
+    },
+    completedChallenges: function(){
+        return Session.get('completedChallenges');
+    },
+    lastChallenge: function(){
+        var completedChallenges = Session.get('completedChallenges');
+        return completedChallenges[completedChallenges.length-1]
     }
 });
 
