@@ -32,6 +32,23 @@ class Server(object):
         else:
             return no_title_response
 
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def shortest_path(self, fromTitle=None, destinationTitle=None): # Refactor to PUT
+        if fromTitle is not None:
+            assert destinationTitle is not None
+            path = self.wikigraph.get_shortest_path(fromTitle, destinationTitle)
+            if len(path) == 0:
+                raise cherrypy.NotFound()
+
+            response = {}
+            response['length'] = len(path)
+            response['articles'] = path
+
+            return response
+        else:
+            return no_title_response
+
 
 if __name__ == '__main__':
     cherrypy.config.update({'server.socket_host': '0.0.0.0',

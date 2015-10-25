@@ -59,9 +59,29 @@ class WikiGraph(object):
                 return output
 
             else:
-                raise NotImplementedError()
+                limit = int(limit)
+                query = """MATCH (article1:Page {title: {title}})-[rel]->(article2: Page) WITH article2, rand() as r RETURN article2 ORDER BY r LIMIT {limit}"""
+                result = self.graph.cypher.execute(query, title=article_title, limit=limit)
+                output = [node[0]["title"] for node in result]
+
+                # Get the shortest path too
+
+
+
 
         raise Exception()
+
+    def get_shortest_path(self, from_title, to_title):
+        query="""
+        MATCH (a:Page { title:{from_title}}),(b:Page { title: {to_title} }),
+        p = shortestPath((a)-[*..limit]-(b))
+        RETURN p
+        """.replace('limit', str(settings.SHORTEST_PATH_LIMIT))
+        result = self.graph.cypher.execute(query, from_title=from_title, to_title=to_title)
+        nodes = result[0][0].nodes
+        output = [node["title"] for node in nodes]
+        return output
+
 
     def do_batch_query(self, query, **kwargs):
         self.transaction.append(query, **kwargs)
