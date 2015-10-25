@@ -221,6 +221,9 @@ Template.explore.helpers({
     },
     pathLength: function(){
         return Session.get('pathLength');
+    },
+    successHops: function(){
+        return Session.get('successHops');
     }
 });
 

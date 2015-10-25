@@ -3,10 +3,11 @@
 
     <h2>Your target is {{target}} in {{pathLength}} hops!</h2>
 
-    <h3>You're now at {{historyItems.length}} hops</h3>
 
     {{#if successHops}}
-        <h3>You got it in {{successHops}}</h3>
+        <h2>You got it in {{successHops}} hops!</h2>
+    {{else}}
+        <h3>You're now at {{historyItems.length}} hops</h3>
     {{/if}}
 
     <ul>
