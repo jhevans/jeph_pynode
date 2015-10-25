@@ -18,3 +18,7 @@
     stroke: #777;
     stroke-width: 2px;
 }
+
+svg {
+    background-color: #d3d3d3;
+}

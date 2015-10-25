@@ -1,5 +1,8 @@
-var width = 640*1.5,
-    height = 480*1.5;
+var width = 640*1,
+    height = 480*1;
+
+var xCentre = width/2;
+var yCentre = height/2;
 
 function render(nodes, links) {
 
@@ -26,13 +29,20 @@ function render(nodes, links) {
         .enter();
 
     var nodeCircle = nodeEnter.append('circle')
+        .on('click', function(d){
+            d.x = xCentre;
+            d.y = yCentre;
+            d.fixed = true;
+            force.start();
+            d3.select(this).attr('fixed', true);
+        })
         .attr('class', 'nodeCircle');
 
     var nodeText = nodeEnter.append("a")
         .attr("xlink:href", function(d){return d.url;})
         .append('text')
         .attr("dx", function (d) {
-            return -30
+            return -30;
         })
         .text(function (d) {
             return d.name
@@ -41,7 +51,7 @@ function render(nodes, links) {
 
     //var nodeLink = nodeEnter;
 
-    force.on('end', function () {
+    force.on('tick', function () {
 
         nodeCircle.attr('r', width / 25)
             .attr('cx', function (d) {
