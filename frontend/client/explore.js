@@ -221,6 +221,10 @@ function saveLastChallenge() {
         })
 
         Session.set('completedChallenges', completedChallenges)
+
+        Session.set('history', []);
+        Session.set('pathLength', []);
+        Session.set('successHops', []);
     }
 }
 function randomStart(source) {

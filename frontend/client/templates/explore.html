@@ -7,11 +7,10 @@
 
                 <h2>Your target is {{target}} in {{pathLength}} hops!</h2>
 
-                {{#if successHops}}
+                {{#if lastChallenge}}
                     <h2>You got to {{lastChallenge.target}} in {{lastChallenge.nHops}} hops! Your target was {{lastChallenge.targetHops}}</h2>
-                {{else}}
-                    <h3>You're now at {{nHops}} hops</h3>
                 {{/if}}
+                <h3>You're now at {{nHops}} hops</h3>
 
                 <ul>
                     {{#each historyItems}}
