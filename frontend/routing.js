@@ -10,8 +10,8 @@ Router.route('/about', function () {
     this.render('about');
 });
 
-Router.route('/register', function () {
-    this.render('register');
+Router.route('/wikiHop', function () {
+    this.render('wikiHop');
 });
 
 

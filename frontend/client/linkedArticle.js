@@ -3,6 +3,7 @@ var count= 0
 Template.linkedArticle.helpers({
     wikiArticle: function(){
         count++;
+        console.log("count = " + count)
         return Session.get('wikiArticle' + this.pageid);
     }
 });
