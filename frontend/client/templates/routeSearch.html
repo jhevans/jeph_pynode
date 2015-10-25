@@ -1,30 +1,17 @@
 <template name="routeSearch">
     <h1 class="jumbotron" id="home">Home</h1>
-    <form class="routeSearchForm form-horizontal">
-        <div class="form-group">
-            <label for="fromInput" class="control-label col-lg-2">From:</label>
-            <div class="col-sm-6">
-                <input type="text" id="fromInput" name="fromInput" class="fromInput form-control input-lg" placeholder="From">
-                <span class="help-block">Please enter a subject to....</span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="toInput" class="control-label col-lg-2">To:</label>
-            <div class="col-sm-6">
-                <input type="text" id="toInput" name="toInput" class="toInput form-control input-lg" placeholder="To">
-                <span class="help-block">Please enter a subject to...</span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2">
-                <p> Search for a route from {{from}} to {{to}}</p>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2">
-                <button type="submit" class="btn btn-lg btn-default">Find a route</button>
-            </div>
-        </div>
-    </form>
 
+    <h2 style="text-indent: 2em"> <mark> Welcome to Wiki Hop, the Wikipedia link navigation game by JEPH
+        (John, Ed, Peter and Hafeez from Autotrader).</mark></h2>
+
+    <h3 style="text-indent: 2em">    Wikipedia pages contain hyperlinks to related articles, forming a vast network of links. Our game turns this into a
+    network visualisation of connected articles, allowing you to navigate between them. In the game you will be given
+    a random start and end article; it is up to you to find the shortest path between them by selecting what you think
+    is the best route.</h3>
+
+    <h3 style="text-indent: 2em">    The game knows what the optimal route is, and will ensure the best route from your current position is always
+    available for selection.</h3>
+
+    <h3 style="text-indent: 2em">    To play the game select the Wiki Hop tab. Alternatively to explore the relationships between different articles
+        click the Explore tab.</h3>
 </template>
