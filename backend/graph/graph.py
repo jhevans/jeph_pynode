@@ -1,3 +1,4 @@
+import cherrypy
 from py2neo import Graph
 import backend.wikiparse.settings as settings
 __author__ = 'Edward.Kent'
@@ -78,6 +79,9 @@ class WikiGraph(object):
         RETURN p
         """.replace('limit', str(settings.SHORTEST_PATH_LIMIT))
         result = self.graph.cypher.execute(query, from_title=from_title, to_title=to_title)
+        if len(result) == 0:
+            raise cherrypy.NotFound()
+
         nodes = result[0][0].nodes
         output = [node["title"] for node in nodes]
         return output
