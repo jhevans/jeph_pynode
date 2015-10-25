@@ -49,6 +49,12 @@ class Server(object):
         else:
             return no_title_response
 
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def randomTitle(self):
+        return {'name': self.wikigraph.get_random_node()}
+
+
 
 if __name__ == '__main__':
     cherrypy.config.update({'server.socket_host': '0.0.0.0',

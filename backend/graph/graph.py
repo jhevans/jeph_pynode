@@ -1,8 +1,7 @@
 import cherrypy
 from py2neo import Graph
 import backend.wikiparse.settings as settings
-from random import shuffle
-
+import random
 __author__ = 'Edward.Kent'
 
 
@@ -74,7 +73,7 @@ class WikiGraph(object):
                 output = [node[0]["title"] for node in result]
 
                 output.append(next_node)
-                shuffle(output)
+                random.shuffle(output)
                 return output
 
 
@@ -96,6 +95,14 @@ class WikiGraph(object):
         output = [node["title"] for node in nodes]
         return output
 
+    def get_random_node(self):
+        offset = random.uniform(0, settings.NODE_COUNT)
+
+        query = """
+        MATCH (a:Page) RETURN a SKIP {random_offset} LIMIT 1"""
+        result = self.graph.cypher.execute(query, random_offset=offset)
+        output = result[0][0]["title"]
+        return output
 
     def do_batch_query(self, query, **kwargs):
         self.transaction.append(query, **kwargs)
