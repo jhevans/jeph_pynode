@@ -5,7 +5,8 @@
         <div class="form-group">
             <label for="fromInput" class="control-label col-lg-2">From:</label>
             <div class="col-sm-6">
-                <input type="text" id="fromInput" name="fromInput" class="fromInput form-control input-lg" placeholder="From">
+                <input type="text" id="fromInput" name="fromInput" class="fromInput form-control input-lg" placeholder="From"
+                       required="true" oninvalid="this.setCustomValidity('Please Enter a subject')">
                 <span class="help-block">Please enter a subject to....</span>
             </div>
         </div>
