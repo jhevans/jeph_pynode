@@ -62,7 +62,7 @@ function render(nodes, links) {
         .attr('class', 'link');
 
 
-    var nodeEnter = svg.selectAll(".nodeText")
+    var nodeEnter = svg.selectAll(".nodeCircle")
         .data(nodes)
         .enter();
 
