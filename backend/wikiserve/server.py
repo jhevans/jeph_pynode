@@ -34,7 +34,7 @@ class Server(object):
 
 
 if __name__ == '__main__':
-    cherrypy.config.update({'server.socket_host': '127.0.0.1',
+    cherrypy.config.update({'server.socket_host': '0.0.0.0',
                             'server.socket_port': 8080,
                             })
     mock_wikigraph = WikiGraph()
