@@ -12,6 +12,11 @@ Meteor.methods({
         var response = HTTP.get("http://52.2.161.209:8080/related?title=" + from + "&destinationTitle=" + to, {});
         return response.data.articles;
     },
+    getLinkedArticlesBasedOnTwoPointsWithLimit: function(from, to, limit){
+        var response = HTTP.get("http://52.2.161.209:8080/related?title=" + from +
+            "&destinationTitle=" + to + "&limit=" + limit, {});
+        return response.data.articles;
+    },
     getLinkedArticlesShortestPath: function(from, to){
         var response = HTTP.get("http://52.2.161.209:8080/shortestPath?title=" + from + "&destinationTitle=" + to, {});
         return response.data.articles;

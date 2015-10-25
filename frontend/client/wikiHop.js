@@ -8,12 +8,21 @@ Template.wikiHop.events({
         var from = event.target.fromInput.value;
         var to = event.target.toInput.value;
         var checkbox = event.target.shortestCheckbox.checked;
+        var limit = event.target.limitInput.value;
         // Insert a task into the collection.va
         Session.set('from', from);
         // Clear form
-
-        if(from && to && checkbox) {
+        if(from && to && checkbox){
             Meteor.call("getLinkedArticlesShortestPath", [from], [to], function (error, response) {
+                var linkedArticles = []
+
+                for (r in response) {
+                    linkedArticles.push({'name': response[r]});
+                }
+                Session.set('linkedArticles', linkedArticles);
+            });
+         } else if(from && to && limit) {
+            Meteor.call("getLinkedArticlesBasedOnTwoPointsWithLimit", [from], [to], [limit], function (error, response) {
                 var linkedArticles = []
 
                 for (r in response) {
