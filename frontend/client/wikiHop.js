@@ -9,7 +9,7 @@ Template.wikiHop.events({
         Session.set('from', from);
         // Clear form
 
-        Meteor.call("getLinkedArticles", [], function(error, response){
+        Meteor.call("getLinkedArticles", ["Hello"], function(error, response){
             Session.set('linkedArticles', response);
         });
     }
