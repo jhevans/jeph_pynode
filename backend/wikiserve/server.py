@@ -27,14 +27,14 @@ class Server(object):
         if title is not None:
             response = {}
             response['name'] = title
-            response['linkedArticles'] = self.wikigraph.get_related_articles(title, limit=limit, destinationTitle=destinationTitle)
+            response['articles'] = self.wikigraph.get_related_articles(title, limit=limit, destinationTitle=destinationTitle)
             return response
         else:
             return no_title_response
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
-    def shortestPath(self, fromTitle=None, destinationTitle=None): # Refactor to PUT
+    def shortestPath(self, title=None, destinationTitle=None): # Refactor to PUT
         if fromTitle is not None:
             assert destinationTitle is not None
             path = self.wikigraph.get_shortest_path(fromTitle, destinationTitle)
@@ -62,4 +62,4 @@ if __name__ == '__main__':
                             })
     mock_wikigraph = WikiGraph()
     cherrypy.quickstart(Server(mock_wikigraph))
-
+zzzzzzzzzzzzz
