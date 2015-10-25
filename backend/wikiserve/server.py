@@ -35,9 +35,9 @@ class Server(object):
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def shortestPath(self, title=None, destinationTitle=None): # Refactor to PUT
-        if fromTitle is not None:
+        if title is not None:
             assert destinationTitle is not None
-            path = self.wikigraph.get_shortest_path(fromTitle, destinationTitle)
+            path = self.wikigraph.get_shortest_path(title, destinationTitle)
             if len(path) == 0:
                 raise cherrypy.NotFound()
 
