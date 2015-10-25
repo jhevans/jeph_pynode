@@ -13,26 +13,9 @@ var svg;
 function update(nextArticle){
 
     Meteor.call("getLinkedArticles", [nextArticle], function(error, linkedArticles){
-
-        var linkedArticleObjects = [];
-
-        linkedArticles.forEach(function (articleName) {
-            linkedArticleObjects.push({
-                name: articleName
-            })
-        })
-
-        var targetArticle = {
-            name: nextArticle
-        };
-        getNodes(targetArticle, linkedArticleObjects)
-        getLinks(targetArticle, linkedArticleObjects);
-        render(nodes, links);
-
-        //force.start();
+        renderArticleLinks(nextArticle);
     });
 }
-
 
 
 //function render(nodes, links) {
@@ -173,15 +156,9 @@ function renderArticleLinks(articleName) {
         nodes = getNodes(targetArticle, linkedArticleObjects)
         links = getLinks(targetArticle, linkedArticleObjects)
         render(nodes, links);
+        addToHistory(articleName);
     })
 }
-Template.explore.onRendered(function(){
-    var articleName = "Glass";
-    Meteor.call("getRandomArticle", [], function(error, articleName){
-        renderArticleLinks(articleName);
-    })
-});
-
 function getNodes(targetArticle, linkedArticles){
     nodes = [];
     nodes.push(targetArticle);
@@ -204,3 +181,34 @@ function getLinks(targetArticle, linkedArticles){
 
     return links;
 }
+
+function addToHistory(articleName){
+    var history = Session.get('history');
+    if(!history){
+        history = [];
+    }
+
+    history.push({name:articleName});
+
+    Session.set('history', history);
+}
+
+Template.explore.onRendered(function(){
+    Meteor.call("getRandomArticle", [], function(error, targetArticle){
+        Session.set('target', targetArticle);
+        Meteor.call("getRandomArticle", [], function(error, sourceArticle){
+            renderArticleLinks(sourceArticle);
+        })
+    })
+});
+
+
+Template.explore.helpers({
+    historyItems: function(){
+        return Session.get('history');
+    },
+    target: function(){
+        return Session.get('target');
+    }
+});
+
