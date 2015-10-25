@@ -1,23 +1,48 @@
 Template.wikiHop.events({
     "submit .wikiHopForm": function (event) {
+        Session.set('linkedArticles', null);
         // Prevent default browser form submit
         event.preventDefault();
 
         // Get value from form element
         var from = event.target.fromInput.value;
-        // Insert a task into the collection
+        var to = event.target.toInput.value;
+        var checkbox = event.target.shortestCheckbox.checked;
+        // Insert a task into the collection.va
         Session.set('from', from);
         // Clear form
 
-        Meteor.call("getLinkedArticles", [from], function(error, response){
-            var linkedArticles = []
+        if(from && to && checkbox) {
+            Meteor.call("getLinkedArticlesShortestPath", [from], [to], function (error, response) {
+                var linkedArticles = []
 
-            for(r in response) {
-                linkedArticles.push({'name':response[r]});
-            }
+                for (r in response) {
+                    linkedArticles.push({'name': response[r]});
+                }
+                Session.set('linkedArticles', linkedArticles);
+            });
+        } else if(from && to) {
+            Meteor.call("getLinkedArticlesBasedOnTwoPoints", [from], [to], function (error, response) {
+                var linkedArticles = []
 
-            Session.set('linkedArticles', linkedArticles);
-        });
+                for (r in response) {
+                    linkedArticles.push({'name': response[r]});
+                }
+                Session.set('linkedArticles', linkedArticles);
+            });
+        } else if(from && !to) {
+            Meteor.call("getLinkedArticles", [from], function(error, response){
+                var linkedArticles = []
+
+                for(r in response) {
+                    linkedArticles.push({'name':response[r]});
+                }
+                Session.set('linkedArticles', linkedArticles);
+            });
+        } else {
+
+        }
+
     }
 
 });
