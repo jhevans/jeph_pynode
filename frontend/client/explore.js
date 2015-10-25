@@ -9,34 +9,26 @@ var force;
 
 var nodes;
 var links;
+var svg;
 
-function update(articleName){
-    console.log(articleName);
+function update(nextArticle){
 
-    Meteor.call("getTargetArticle", [articleName], function(error, targetArticle){
-        var linkedArticles = targetArticle.linkedArticles;
+    Meteor.call("getLinkedArticles", [nextArticle], function(error, linkedArticles){
 
+        var linkedArticleObjects = [];
 
-        nodes = getNodes(targetArticle, linkedArticles);
-        var newThing = {
-            name: "fooo"
-        };
-        nodes.push(newThing);
-        links = getLinks(linkedArticles);
-        links.push({
-            source:0,
-            target: newThing
-        });
-
-        console.log(nodes);
-        console.log(links);
-        //force
-        //    .nodes(nodes)
-        //    .links(links);
-
+        linkedArticles.forEach(function (articleName) {
+            linkedArticleObjects.push({
+                name: articleName
+            })
+        })
+        nodes = getNodes({
+            name: "Glass"
+        }, linkedArticleObjects)
+        links = getLinks(linkedArticleObjects);
         render(nodes, links);
-        //force.start();
 
+        //force.start();
     });
 }
 
@@ -44,7 +36,7 @@ function update(articleName){
 
 function render(nodes, links) {
 
-    var svg = d3.select('.canvasContainer')
+    svg = d3.select('.canvasContainer')
         .attr('width', width)
         .attr('height', height);
 
@@ -145,7 +137,6 @@ Template.explore.onRendered(function(){
             name: "Glass"
         }, linkedArticleObjects)
         links = getLinks(linkedArticleObjects)
-        debugger;
         render(nodes, links);
     });
 });
@@ -159,7 +150,7 @@ function getNodes(targetArticle, linkedArticles){
     })
 
     nodes.forEach(function(article){
-        article.url = "https://en.wikipedia.org/wiki/Tom_Hanks";
+        article.url = "https://en.wikipedia.org/wiki/" + article.name;
     })
     return nodes;
 };
