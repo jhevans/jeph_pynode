@@ -127,6 +127,27 @@ class WikiGraph(object):
         output = [node["title"] for node in nodes]
         return output
 
+    def get_path(self, from_title, to_title, limit=None):
+
+        if limit is None or limit == 0:
+            return self.get_shortest_path(from_title, to_title)
+        query="""
+        MATCH (a:Page),(b:Page)
+        WHERE a.title =~ {from_title} AND b.title =~ {to_title}
+        WITH a, b MATCH
+        p = (a)-[*limit]-(b)
+        RETURN p
+        LIMIT 1
+        """.replace('limit', str(limit))
+        result = self.graph.cypher.execute(query, from_title='(?i)'+from_title, to_title='(?i)'+to_title)
+        if len(result) == 0:
+            raise cherrypy.NotFound()
+
+        nodes = result[0][0].nodes
+        output = [node["title"] for node in nodes]
+        return output
+
+
     def get_random_node(self):
         offset = random.uniform(0, settings.NODE_COUNT)
 

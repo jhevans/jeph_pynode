@@ -51,6 +51,23 @@ class Server(object):
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
+    def specificPath(self, title=None, destinationTitle=None, limit=None): # Refactor to PUT
+        if title is not None:
+            assert destinationTitle is not None
+            path = self.wikigraph.get_path(title, destinationTitle, limit=limit)
+            if len(path) == 0:
+                raise cherrypy.NotFound()
+
+            response = {}
+            response['length'] = len(path)
+            response['articles'] = path
+
+            return response
+        else:
+            return no_title_response
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
     def randomTitle(self):
         return {'name': self.wikigraph.get_random_node()}
 
