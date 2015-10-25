@@ -32,7 +32,7 @@ class WikiGraph(object):
             self.do_batch_query(query, title=title)
 
     def add_link(self, from_title, to_title, count=1):
-        query = """MERGE (from:Article {title:{from_title}})-[rel:RELATED_TO]->(to:Article {title:{to_title}})
+        query = """MERGE (from:Article {title:{from_title}})-[rel]->(to:Article {title:{to_title}})
                     ON CREATE SET rel.weight = 1
                     ON MATCH SET rel.weight = rel.weight + {count}
                 """
@@ -44,10 +44,11 @@ class WikiGraph(object):
             self.add_link(from_title, link, count=count)
 
     def get_related_articles(self, article_title):
-        query = """MATCH (article1:Article {title: {title}})-[:RELATED_TO]->(article2: Article) RETURN article2"""
+        query = """MATCH (article1:Page {title: {title}})-[rel]->(article2: Page) RETURN article2"""
 
         result = self.graph.cypher.execute(query, title=article_title)
-        return result
+        output = [node[0]["title"] for node in result]
+        return output
 
     def do_batch_query(self, query, **kwargs):
         self.transaction.append(query, **kwargs)
