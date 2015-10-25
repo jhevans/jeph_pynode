@@ -13,7 +13,7 @@ Meteor.methods({
         return response.data.articles;
     },
     getLinkedArticlesBasedOnTwoPointsWithLimit: function(from, to, limit){
-        var response = HTTP.get("http://52.2.161.209:8080/related?title=" + from +
+        var response = HTTP.get("http://52.2.161.209:8080/specificPath?title=" + from +
             "&destinationTitle=" + to + "&limit=" + limit, {});
         return response.data.articles;
     },

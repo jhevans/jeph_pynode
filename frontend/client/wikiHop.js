@@ -31,7 +31,7 @@ Template.wikiHop.events({
                 Session.set('linkedArticles', linkedArticles);
             });
         } else if(from && to) {
-            Meteor.call("getLinkedArticlesBasedOnTwoPoints", [from], [to], function (error, response) {
+            Meteor.call("getLinkedArticlesBasedOnTwoPointsWithLimit", [from], [to], [10], function (error, response) {
                 var linkedArticles = []
 
                 for (r in response) {
