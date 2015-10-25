@@ -1,0 +1,24 @@
+.nodeCircle {
+    fill: #ccc;
+    stroke: #fff;
+    stroke-width: 2px;
+}
+
+.nodeText {
+    color: #333;
+}
+
+.nodeCircle:first-of-type {
+     fill: #4c4;
+     stroke: #fff;
+     stroke-width: 2px;
+}
+
+.link {
+    stroke: #777;
+    stroke-width: 2px;
+}
+
+svg {
+    background-color: #d3d3d3;
+}

@@ -1,0 +1,38 @@
+<template name="wikiHop">
+    <h1>Wiki Hopping</h1>
+
+    <form class="wikiHopForm form-horizontal">
+        <div class="form-group">
+            <label for="fromInput" class="control-label col-lg-2">From:</label>
+            <div class="col-sm-6">
+                <input type="text" id="fromInput" name="fromInput" class="fromInput form-control input-lg" placeholder="From"
+                       >
+                <span class="help-block">Please enter a subject from...</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="toInput" class="control-label col-lg-2">To:</label>
+            <div class="col-sm-6">
+                <input type="text" id="toInput" name="toInput" class="toInput form-control input-lg" placeholder="To">
+                <span class="help-block">Please enter a subject to...</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-6">
+                <div class="checkbox">
+                    <label><input type="checkbox" name="shortestCheckbox">shortest Path?</label>
+                </div>
+                <div class="pull-right">
+                    <button type="submit" class="btn btn-lg btn-default">Find a route</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+
+        </div>
+    </form>
+
+    {{#each linkedArticles}}
+        {{>linkedArticle}}
+    {{/each}}
+</template>

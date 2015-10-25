@@ -1,0 +1,14 @@
+<template name="explore">
+    <h1>Explore</h1>
+
+    <h2>Your target is {{target}} in {{pathLength}} hops!</h2>
+
+    <ul>
+    {{#each historyItems}}
+        <li>{{name}}</li>
+    {{/each}}
+    </ul>
+    <svg class="canvasContainer">
+
+    </svg>
+</template>

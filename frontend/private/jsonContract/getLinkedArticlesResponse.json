@@ -1,0 +1,18 @@
+{
+  "targetArticles": [
+    {
+      "pageid": "43568",
+      "name": "Tom_Hanks",
+      "linkedArticles": [
+        {
+          "pageid": "41528",
+          "name": "Forrest_Gump"
+        },
+        {
+          "pageid": "946164",
+          "name": "The_Green_Mile_(film)"
+        }
+      ]
+    }
+  ]
+}
