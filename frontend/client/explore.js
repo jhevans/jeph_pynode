@@ -4,19 +4,57 @@ var width = 640*1,
 var xCentre = width/2;
 var yCentre = height/2;
 
+var force;
+
+
+var nodes;
+var links;
+
+function update(articleName){
+    console.log(articleName);
+
+    Meteor.call("getTargetArticle", [articleName], function(error, targetArticle){
+        var linkedArticles = targetArticle.linkedArticles;
+
+
+        nodes = getNodes(targetArticle, linkedArticles);
+        var newThing = {
+            name: "fooo"
+        };
+        nodes.push(newThing);
+        links = getLinks(linkedArticles);
+        links.push({
+            source:0,
+            target: newThing
+        });
+
+        console.log(nodes);
+        console.log(links);
+        //force
+        //    .nodes(nodes)
+        //    .links(links);
+
+        render(nodes, links);
+        //force.start();
+
+    });
+}
+
+
+
 function render(nodes, links) {
 
-    var svg = d3.select('.canvasContainer').append('svg')
+    var svg = d3.select('.canvasContainer')
         .attr('width', width)
         .attr('height', height);
 
-    var force = d3.layout.force()
+    force = d3.layout.force()
         .size([width, height])
         .nodes(nodes)
         .links(links);
 
     force.linkDistance(width / 6);
-    force.charge(-10000);
+    force.charge(-1000);
 
     var link = svg.selectAll('.link')
         .data(links)
@@ -32,9 +70,7 @@ function render(nodes, links) {
         .on('click', function(d){
             d.x = xCentre;
             d.y = yCentre;
-            d.fixed = true;
-            force.start();
-            d3.select(this).attr('fixed', true);
+            update(d.name);
         })
         .attr('class', 'nodeCircle');
 
@@ -45,11 +81,10 @@ function render(nodes, links) {
             return -30;
         })
         .text(function (d) {
+            console.log(d.name)
             return d.name
         })
         .attr('class', 'nodeText');
-
-    //var nodeLink = nodeEnter;
 
     force.on('tick', function () {
 
@@ -69,28 +104,15 @@ function render(nodes, links) {
                 return d.y;
             });
 
-        //nodeLink
-        //    .attr('x', function (d) {
-        //        return d.x;
-        //    })
-        //    .attr('y', function (d) {
-        //        return d.y;
-        //    })
-        //    .attr('height', function (d) {
-        //        return 100;
-        //    })
-        //    .attr('width', function (d) {
-        //        return 100;
-        //    });
-
         // We also need to update positions of the links.
         // For those elements, the force layout sets the
         // `source` and `target` properties, specifying
         // `x` and `y` values in each case.
 
-        link.attr('x1', function (d) {
-            return d.source.x;
-        })
+        link
+            .attr('x1', function (d) {
+                return d.source.x;
+            })
             .attr('y1', function (d) {
                 return d.source.y;
             })
@@ -109,8 +131,8 @@ function render(nodes, links) {
 Template.explore.onRendered(function(){
     Meteor.call("getTargetArticle", [], function(error, targetArticle){
         var linkedArticles = targetArticle.linkedArticles;
-        var nodes = getNodes(targetArticle, linkedArticles)
-        var links = getLinks(linkedArticles)
+        nodes = getNodes(targetArticle, linkedArticles)
+        links = getLinks(linkedArticles)
         render(nodes, links);
     });
 });
@@ -131,8 +153,8 @@ function getNodes(targetArticle, linkedArticles){
 
 function getLinks(linkedArticles){
     var links = [];
-    linkedArticles.forEach(function(value, index){
-        links.push({source:0, target: index+1})
+    linkedArticles.forEach(function(value){
+        links.push({source:0, target: value})
     });
 
     return links;
