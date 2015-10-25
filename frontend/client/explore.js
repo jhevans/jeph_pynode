@@ -1,8 +1,5 @@
-var width = 640*1.5,
-    height = 480*1.5;
-
-var xCentre = width/2;
-var yCentre = height/2;
+var width = 640*1.25,
+    height = 480*1.25;
 
 var force;
 
@@ -10,10 +7,12 @@ var nodes;
 var links;
 var svg;
 
+var sourceArticle;
+
 function update(nextArticle){
 
     Meteor.call("getLinkedArticles", [nextArticle], function(error, linkedArticles){
-        renderArticleLinks(nextArticle);
+        renderArticleLinks(nextArticle, Session.get('target'));
     });
 }
 
@@ -81,7 +80,6 @@ function render() {
             return -30;
         })
         .text(function (d) {
-            console.log(d.name);
             return d.name;
         })
         .attr('class', 'nodeText');
@@ -93,7 +91,6 @@ function render() {
     nodeTextGroup
         .data(nodes, name)
         .text(function (d) {
-            console.log(d.name);
             return d.name;
         });
 
@@ -140,25 +137,32 @@ function render() {
 
     force.start();
 }
-function renderArticleLinks(articleName) {
-    Meteor.call("getLinkedArticles", [articleName], function (error, linkedArticles) {
 
+function renderArticleLinks(articleName, targetArticle) {
+    if(articleName === targetArticle){
+        Session.set("successHops", Session.get('history').length);
+        randomStart();
+        return;
+    }
+
+    Meteor.call("getLinkedArticlesBasedOnTwoPoints", [articleName], [targetArticle], function (error, linkedArticles) {
         var linkedArticleObjects = [];
 
         linkedArticles.forEach(function (articleName) {
             linkedArticleObjects.push({
                 name: articleName
             })
-        })
-        var targetArticle = {
+        });
+        var targetArticleObject = {
             name: articleName
         };
-        nodes = getNodes(targetArticle, linkedArticleObjects)
-        links = getLinks(targetArticle, linkedArticleObjects)
+        nodes = getNodes(targetArticleObject, linkedArticleObjects)
+        links = getLinks(targetArticleObject, linkedArticleObjects)
         render(nodes, links);
         addToHistory(articleName);
     })
 }
+
 function getNodes(targetArticle, linkedArticles){
     nodes = [];
     nodes.push(targetArticle);
@@ -193,15 +197,18 @@ function addToHistory(articleName){
     Session.set('history', history);
 }
 
-Template.explore.onRendered(function(){
-
-    Meteor.call("getRelatedRandomArticles", [], function(error, response){
-        var sourceArticle = response.title1;
+function randomStart() {
+    Meteor.call("getRelatedRandomArticles", [], function (error, response) {
+        sourceArticle = response.title1;
         var targetArticle = response.title2;
         Session.set('target', targetArticle);
         Session.set('pathLength', response.pathLength);
-        renderArticleLinks(sourceArticle);
+        debugger;
+        renderArticleLinks(sourceArticle, targetArticle);
     });
+}
+Template.explore.onRendered(function () {
+    randomStart();
 });
 
 

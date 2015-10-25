@@ -9,7 +9,11 @@ Meteor.methods({
         return response.data.name;
     },
     getLinkedArticlesBasedOnTwoPoints: function(from, to){
-        var response = HTTP.get("http://52.2.161.209:8080/related?title=" + from + "&destinationTitle=" + to, {});
+        console.log(from);
+        console.log(to);
+        var url = "http://52.2.161.209:8080/related?limit=4&title=" + from + "&destinationTitle=" + to;
+        console.log(url);
+        var response = HTTP.get(url, {});
         return response.data.articles;
     },
     getLinkedArticlesShortestPath: function(from, to){
