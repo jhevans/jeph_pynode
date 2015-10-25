@@ -2,18 +2,17 @@ import cherrypy
 from py2neo import Graph
 import backend.wikiparse.settings as settings
 import random
+
 __author__ = 'Edward.Kent'
 
 
 class WikiGraph(object):
-
     def __init__(self):
         self.graph = Graph(self.get_uri(settings.NEO4J_SERVER, settings.NEO4J_PORT, settings.NEO4J_USERNAME,
                                         settings.NEO4J_PASSWORD))
         self.transaction = self.graph.cypher.begin()
         self.query_count = 0
         self.batch_size = 40
-
 
     @staticmethod
     def get_uri(server_path, port, username, password):
@@ -54,7 +53,7 @@ class WikiGraph(object):
             query = """MATCH (article1:Page)-[rel]->(article2: Page)
             WHERE article1.title =~ {title}
             RETURN article2"""
-            result = self.graph.cypher.execute(query, title='(?i)'+article_title)
+            result = self.graph.cypher.execute(query, title='(?i)' + article_title)
             output = [node[0]["title"] for node in result]
 
             return output
@@ -70,9 +69,8 @@ class WikiGraph(object):
                 RETURN article2
                 LIMIT {limit}
                 """
-                result = self.graph.cypher.execute(query, title='(?i)'+article_title, limit=limit)
+                result = self.graph.cypher.execute(query, title='(?i)' + article_title, limit=limit)
                 output = [node[0]["title"] for node in result]
-
 
                 return output
 
@@ -93,14 +91,11 @@ class WikiGraph(object):
                 WHERE article1.title =~ {title} AND article2.title <> {correct}
                 WITH article2, rand() as r RETURN article2 ORDER BY r LIMIT {limit}
                 """
-                result = self.graph.cypher.execute(query, title='(?i)'+article_title, limit=limit, correct=next_node)
+                result = self.graph.cypher.execute(query, title='(?i)' + article_title, limit=limit, correct=next_node)
                 output = [node[0]["title"] for node in result]
                 output.append(next_node)
                 random.shuffle(output)
                 return output
-
-
-
 
         raise Exception()
 
@@ -112,14 +107,14 @@ class WikiGraph(object):
         # """.replace('limit', str(settings.SHORTEST_PATH_LIMIT))
         # result = self.graph.cypher.execute(query, from_title=from_title, to_title=to_title)
         # if len(result) == 0:
-        query="""
+        query = """
         MATCH (a:Page),(b:Page)
         WHERE a.title =~ {from_title} AND b.title =~ {to_title}
         WITH a, b MATCH
         p = shortestPath((a)-[*..limit]-(b))
         RETURN p
         """.replace('limit', str(settings.SHORTEST_PATH_LIMIT))
-        result = self.graph.cypher.execute(query, from_title='(?i)'+from_title, to_title='(?i)'+to_title)
+        result = self.graph.cypher.execute(query, from_title='(?i)' + from_title, to_title='(?i)' + to_title)
         if len(result) == 0:
             raise cherrypy.NotFound()
 
@@ -129,9 +124,11 @@ class WikiGraph(object):
 
     def get_path(self, from_title, to_title, limit=None):
 
-        if limit is None or limit == 0:
+        if limit is None or str(limit) == '0' or str(limit) == '1':
             return self.get_shortest_path(from_title, to_title)
-        query="""
+
+        limit = str(int(limit) - 1)
+        query = """
         MATCH (a:Page),(b:Page)
         WHERE a.title =~ {from_title} AND b.title =~ {to_title}
         WITH a, b MATCH
@@ -139,14 +136,13 @@ class WikiGraph(object):
         RETURN p
         LIMIT 1
         """.replace('limit', str(limit))
-        result = self.graph.cypher.execute(query, from_title='(?i)'+from_title, to_title='(?i)'+to_title)
+        result = self.graph.cypher.execute(query, from_title='(?i)' + from_title, to_title='(?i)' + to_title)
         if len(result) == 0:
             raise cherrypy.NotFound()
 
         nodes = result[0][0].nodes
         output = [node["title"] for node in nodes]
         return output
-
 
     def get_random_node(self):
         offset = random.uniform(0, settings.NODE_COUNT)
@@ -181,7 +177,6 @@ class WikiGraph(object):
         self.transaction = self.graph.cypher.begin()
 
 
-
 def test1():
     test_name = 'Test article 3'
     test_id = 2
@@ -197,11 +192,11 @@ def test1():
     graph.add_link(test_name, test_name_2)
 
 
-
 def test2():
     test_name = 'Test article 3'
     graph = WikiGraph()
     print graph.get_related_articles(test_name)
+
 
 if __name__ == '__main__':
     test2()
