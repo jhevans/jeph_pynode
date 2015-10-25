@@ -7,7 +7,14 @@ Meteor.methods({
 
     getWikiArticleByTitle: function(title){
         var url = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=";
-        var response = HTTP.get(url + title, {});
-        return JSON.parse(response.content);
+        var response = HTTP.get(url + encodeURIComponent(title), {});
+        var parsedResponse = JSON.parse(response.content).query.pages;
+
+        var firstKey;
+        for (key in parsedResponse) {
+            firstKey = key
+        }
+
+        return parsedResponse[firstKey];
     }
 });
