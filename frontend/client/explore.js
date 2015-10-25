@@ -10,10 +10,15 @@ var svg;
 var sourceArticle;
 
 function update(nextArticle){
-
-    Meteor.call("getLinkedArticles", [nextArticle], function(error, linkedArticles){
-        renderArticleLinks(nextArticle, Session.get('target'));
-    });
+    var target = Session.get('target');
+    if(nextArticle && target && nextArticle.toLowerCase() === target.toLowerCase()){
+        saveLastChallenge();
+        randomStart(nextArticle);
+    } else{
+        Meteor.call("getLinkedArticles", [nextArticle], function(error, linkedArticles){
+            renderArticleLinks(nextArticle, target);
+        });
+    }
 }
 
 
@@ -139,12 +144,6 @@ function render() {
 }
 
 function renderArticleLinks(articleName, targetArticle) {
-    if(articleName && targetArticle && articleName.toLowerCase() === targetArticle.toLowerCase()){
-        saveLastChallenge();
-
-        randomStart(articleName);
-        return;
-    }
 
     Meteor.call("getLinkedArticlesBasedOnTwoPoints", [articleName], [targetArticle], function (error, linkedArticles) {
         var linkedArticleObjects = [];
