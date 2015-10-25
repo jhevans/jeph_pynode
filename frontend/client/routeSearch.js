@@ -13,8 +13,9 @@ Template.routeSearch.events({
         Session.set('to', to);
         // Clear form
 
-        Meteor.call("getRoute", [from, to], function(error, response){
-            Session.set('route', response);
+        Meteor.call("getLinkedArticles", [], function(error, response){
+            debugger;
+            Session.set('linkedArticles', response);
         });
     }
 });
@@ -29,6 +30,6 @@ Template.routeSearch.helpers({
 
     },
     linkedArticles: function(){
-        return Session.get('route').targetArticles[0].linkedArticles;
+        return Session.get('linkedArticles');
     }
 });
