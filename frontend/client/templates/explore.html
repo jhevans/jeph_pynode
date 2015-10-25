@@ -5,7 +5,7 @@
 
 
     {{#if successHops}}
-        <h2>You got from {{lastChallenge.source}} to {{lastChallenge.target}} in {{lastChallenge.nHops}} hops! Your target was {{lastChallenge.targetHops}}</h2>
+        <h2>You got to {{lastChallenge.target}} in {{lastChallenge.nHops}} hops! Your target was {{lastChallenge.targetHops}}</h2>
     {{else}}
         <h3>You're now at {{historyItems.length}} hops</h3>
     {{/if}}
