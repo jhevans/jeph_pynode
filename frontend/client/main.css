@@ -15,3 +15,17 @@ html, body {
     height: 100%;
     margin: 0 auto 2em;
 }
+
+#wikiHop.jumbotron{
+     background: url('images/jeph_explore.png') 80px 60px !important;
+    background-size: contain;
+ }
+
+#explore.jumbotron{
+     background: url('images/jeph_from_to.png') 80px 80px !important;
+ }
+
+#home.jumbotron{
+    background: url('images/jeph_logo.png') !important;
+    background-size: contain;
+}
