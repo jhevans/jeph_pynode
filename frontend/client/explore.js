@@ -233,6 +233,10 @@ function randomStart(source) {
         source = response.title1;
         var targetArticle = response.title2;
         Session.set('target', targetArticle);
+        Meteor.call("getWikiArticleByTitle", [targetArticle], function(error, response){
+            Session.set('targetArticleExtract', response);
+        })
+
         Session.set('source', source);
         Session.set('pathLength', response.pathLength);
         renderArticleLinks(source, targetArticle);
@@ -272,6 +276,9 @@ Template.explore.helpers({
     nHops: function(){
         var length = Session.get('history').length;
         return length ? length -1: 0;
+    },
+    targetArticleExtract: function(){
+        return Session.get('targetArticleExtract');
     }
 });
 
